@@ -1,0 +1,2566 @@
+{
+  "cert_table_sha256": "c7c7c5976dc3f088aeeec4c6402d00a3d0d764e8f216e5d53a74747144911dcc",
+  "environment": {
+    "executable": "/opt/anaconda3/envs/sdpbnb/bin/python",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "python": "3.12.13 | packaged by conda-forge | (main, Mar  5 2026, 17:06:14) [Clang 19.1.7 ]"
+  },
+  "families": [
+    {
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "label": "F2_reference",
+      "table_entry": {
+        "D": 96,
+        "K_definite": true,
+        "K_nullity": 0,
+        "N": 3,
+        "certified": true,
+        "closed_square_ok": true,
+        "compute_seconds": 0.04015012498712167,
+        "d": 5,
+        "elev_min_rel": 0.0,
+        "eta": 2,
+        "k": 1,
+        "l": 0,
+        "n_live_endpoints": 4,
+        "nonneg": true,
+        "r": 10,
+        "strict": false
+      }
+    },
+    {
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "label": "cubic_two",
+      "table_entry": {
+        "D": 96,
+        "K_definite": true,
+        "K_nullity": 0,
+        "N": 2,
+        "certified": true,
+        "closed_square_ok": true,
+        "compute_seconds": 0.010987582994857803,
+        "d": 3,
+        "elev_min_rel": 0.0,
+        "eta": 1,
+        "k": 1,
+        "l": 0,
+        "n_live_endpoints": 2,
+        "nonneg": true,
+        "r": 4,
+        "strict": false
+      }
+    },
+    {
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "label": "quintic_two",
+      "table_entry": {
+        "D": 96,
+        "K_definite": true,
+        "K_nullity": 0,
+        "N": 2,
+        "certified": true,
+        "closed_square_ok": true,
+        "compute_seconds": 0.01684450000175275,
+        "d": 5,
+        "elev_min_rel": 0.0,
+        "eta": 2,
+        "k": 1,
+        "l": 0,
+        "n_live_endpoints": 2,
+        "nonneg": true,
+        "r": 7,
+        "strict": false
+      }
+    },
+    {
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "label": "quintic_four",
+      "table_entry": {
+        "D": 96,
+        "K_definite": true,
+        "K_nullity": 0,
+        "N": 4,
+        "certified": true,
+        "closed_square_ok": true,
+        "compute_seconds": 0.07870124996406958,
+        "d": 5,
+        "elev_min_rel": 0.0,
+        "eta": 2,
+        "k": 1,
+        "l": 0,
+        "n_live_endpoints": 6,
+        "nonneg": true,
+        "r": 13,
+        "strict": false
+      }
+    }
+  ],
+  "input_sha256": "16d9e9d4a028d78c5695aec5636bcade559f50a8afdc8bbc491eb08e1cda1e5f",
+  "protocol": {
+    "arm": "affine_green",
+    "cell_max_depth": 24,
+    "cell_max_nodes": 10000,
+    "construction_margin": "dyadic halving from1/2; maximum256 decreases",
+    "directions": "vertical axis1, signs(-1,+1), both attempted unless the identical plain-reference early-return gate accepts",
+    "failure_policy": "retain all48 rows, all attempts, all unknown statuses and exceptions; never infer original infeasibility",
+    "geometry": "random.Random seeds2026090800..2026090811; all generated inputs serialized before recovery; same scenes per family",
+    "instances": 48,
+    "lower_bound": "exact obstacle-free derivative-energy16 only; no same-instance optimized SDP bound is claimed",
+    "mode": "q1_recovery.modes_for canonical Green mode: q_star=(floor(N/2)+1/2)/N; unit value at that point. For even N this is not global time1/2.",
+    "obstacle_count": 3,
+    "per_family": 12,
+    "physical_gate": "strict physical p>0 on entire intervals; exact binary-rational coefficients, zero tolerance",
+    "polish_steps": 12,
+    "reference": "exact minimum derivative-energy affine particular curve between(-2,0) and(2,0), fixed independently of obstacles; verified equal to the straight line of energy16",
+    "strata_per_family": {
+      "clutter": 6,
+      "near_endpoint": 3,
+      "outside_vertical_condition": 3
+    },
+    "timing": "one serial pass; acquisition/model/mode setup charged per row separately from recover; independent q1_verify replay reported separately; no solver timing, speedup, common-parameter optimality or higher-k claim",
+    "witness": "allN^2 exact coefficient blocks at degree96, nonzero blocks, endpoint rows/corners, exact reducedK LDL, nullspace and block identities, homogeneous mode and affine reference constraints"
+  },
+  "rows": [
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/00",
+      "id": "F2_reference/00",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.042,
+            0.025
+          ],
+          0.413
+        ],
+        [
+          [
+            -0.834,
+            0.367
+          ],
+          0.254
+        ],
+        [
+          [
+            0.767,
+            -0.244
+          ],
+          0.256
+        ]
+      ],
+      "seed": 2026090800,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/00",
+      "id": "cubic_two/00",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.042,
+            0.025
+          ],
+          0.413
+        ],
+        [
+          [
+            -0.834,
+            0.367
+          ],
+          0.254
+        ],
+        [
+          [
+            0.767,
+            -0.244
+          ],
+          0.256
+        ]
+      ],
+      "seed": 2026090800,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/00",
+      "id": "quintic_two/00",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.042,
+            0.025
+          ],
+          0.413
+        ],
+        [
+          [
+            -0.834,
+            0.367
+          ],
+          0.254
+        ],
+        [
+          [
+            0.767,
+            -0.244
+          ],
+          0.256
+        ]
+      ],
+      "seed": 2026090800,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/00",
+      "id": "quintic_four/00",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.042,
+            0.025
+          ],
+          0.413
+        ],
+        [
+          [
+            -0.834,
+            0.367
+          ],
+          0.254
+        ],
+        [
+          [
+            0.767,
+            -0.244
+          ],
+          0.256
+        ]
+      ],
+      "seed": 2026090800,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/01",
+      "id": "cubic_two/01",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.013,
+            0.001
+          ],
+          0.345
+        ],
+        [
+          [
+            0.572,
+            0.128
+          ],
+          0.193
+        ],
+        [
+          [
+            -0.336,
+            -0.368
+          ],
+          0.257
+        ]
+      ],
+      "seed": 2026090801,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/01",
+      "id": "quintic_two/01",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.013,
+            0.001
+          ],
+          0.345
+        ],
+        [
+          [
+            0.572,
+            0.128
+          ],
+          0.193
+        ],
+        [
+          [
+            -0.336,
+            -0.368
+          ],
+          0.257
+        ]
+      ],
+      "seed": 2026090801,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/01",
+      "id": "quintic_four/01",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.013,
+            0.001
+          ],
+          0.345
+        ],
+        [
+          [
+            0.572,
+            0.128
+          ],
+          0.193
+        ],
+        [
+          [
+            -0.336,
+            -0.368
+          ],
+          0.257
+        ]
+      ],
+      "seed": 2026090801,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/01",
+      "id": "F2_reference/01",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.013,
+            0.001
+          ],
+          0.345
+        ],
+        [
+          [
+            0.572,
+            0.128
+          ],
+          0.193
+        ],
+        [
+          [
+            -0.336,
+            -0.368
+          ],
+          0.257
+        ]
+      ],
+      "seed": 2026090801,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/02",
+      "id": "quintic_two/02",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.101,
+            -0.03
+          ],
+          0.412
+        ],
+        [
+          [
+            1.087,
+            -0.268
+          ],
+          0.234
+        ],
+        [
+          [
+            1.013,
+            0.125
+          ],
+          0.239
+        ]
+      ],
+      "seed": 2026090802,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/02",
+      "id": "quintic_four/02",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.101,
+            -0.03
+          ],
+          0.412
+        ],
+        [
+          [
+            1.087,
+            -0.268
+          ],
+          0.234
+        ],
+        [
+          [
+            1.013,
+            0.125
+          ],
+          0.239
+        ]
+      ],
+      "seed": 2026090802,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/02",
+      "id": "F2_reference/02",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.101,
+            -0.03
+          ],
+          0.412
+        ],
+        [
+          [
+            1.087,
+            -0.268
+          ],
+          0.234
+        ],
+        [
+          [
+            1.013,
+            0.125
+          ],
+          0.239
+        ]
+      ],
+      "seed": 2026090802,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/02",
+      "id": "cubic_two/02",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.101,
+            -0.03
+          ],
+          0.412
+        ],
+        [
+          [
+            1.087,
+            -0.268
+          ],
+          0.234
+        ],
+        [
+          [
+            1.013,
+            0.125
+          ],
+          0.239
+        ]
+      ],
+      "seed": 2026090802,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/03",
+      "id": "quintic_four/03",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            -0.11,
+            0.015
+          ],
+          0.324
+        ],
+        [
+          [
+            -0.773,
+            -0.076
+          ],
+          0.246
+        ],
+        [
+          [
+            -0.392,
+            -0.263
+          ],
+          0.209
+        ]
+      ],
+      "seed": 2026090803,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/03",
+      "id": "F2_reference/03",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            -0.11,
+            0.015
+          ],
+          0.324
+        ],
+        [
+          [
+            -0.773,
+            -0.076
+          ],
+          0.246
+        ],
+        [
+          [
+            -0.392,
+            -0.263
+          ],
+          0.209
+        ]
+      ],
+      "seed": 2026090803,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/03",
+      "id": "cubic_two/03",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            -0.11,
+            0.015
+          ],
+          0.324
+        ],
+        [
+          [
+            -0.773,
+            -0.076
+          ],
+          0.246
+        ],
+        [
+          [
+            -0.392,
+            -0.263
+          ],
+          0.209
+        ]
+      ],
+      "seed": 2026090803,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/03",
+      "id": "quintic_two/03",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            -0.11,
+            0.015
+          ],
+          0.324
+        ],
+        [
+          [
+            -0.773,
+            -0.076
+          ],
+          0.246
+        ],
+        [
+          [
+            -0.392,
+            -0.263
+          ],
+          0.209
+        ]
+      ],
+      "seed": 2026090803,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/04",
+      "id": "F2_reference/04",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.102,
+            -0.024
+          ],
+          0.315
+        ],
+        [
+          [
+            -0.817,
+            0.241
+          ],
+          0.212
+        ],
+        [
+          [
+            0.863,
+            0.203
+          ],
+          0.191
+        ]
+      ],
+      "seed": 2026090804,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/04",
+      "id": "cubic_two/04",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.102,
+            -0.024
+          ],
+          0.315
+        ],
+        [
+          [
+            -0.817,
+            0.241
+          ],
+          0.212
+        ],
+        [
+          [
+            0.863,
+            0.203
+          ],
+          0.191
+        ]
+      ],
+      "seed": 2026090804,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/04",
+      "id": "quintic_two/04",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.102,
+            -0.024
+          ],
+          0.315
+        ],
+        [
+          [
+            -0.817,
+            0.241
+          ],
+          0.212
+        ],
+        [
+          [
+            0.863,
+            0.203
+          ],
+          0.191
+        ]
+      ],
+      "seed": 2026090804,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/04",
+      "id": "quintic_four/04",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.102,
+            -0.024
+          ],
+          0.315
+        ],
+        [
+          [
+            -0.817,
+            0.241
+          ],
+          0.212
+        ],
+        [
+          [
+            0.863,
+            0.203
+          ],
+          0.191
+        ]
+      ],
+      "seed": 2026090804,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/05",
+      "id": "cubic_two/05",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.092,
+            -0.02
+          ],
+          0.416
+        ],
+        [
+          [
+            0.072,
+            0.273
+          ],
+          0.23
+        ],
+        [
+          [
+            0.764,
+            -0.276
+          ],
+          0.18
+        ]
+      ],
+      "seed": 2026090805,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/05",
+      "id": "quintic_two/05",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.092,
+            -0.02
+          ],
+          0.416
+        ],
+        [
+          [
+            0.072,
+            0.273
+          ],
+          0.23
+        ],
+        [
+          [
+            0.764,
+            -0.276
+          ],
+          0.18
+        ]
+      ],
+      "seed": 2026090805,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/05",
+      "id": "quintic_four/05",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.092,
+            -0.02
+          ],
+          0.416
+        ],
+        [
+          [
+            0.072,
+            0.273
+          ],
+          0.23
+        ],
+        [
+          [
+            0.764,
+            -0.276
+          ],
+          0.18
+        ]
+      ],
+      "seed": 2026090805,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/05",
+      "id": "F2_reference/05",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.092,
+            -0.02
+          ],
+          0.416
+        ],
+        [
+          [
+            0.072,
+            0.273
+          ],
+          0.23
+        ],
+        [
+          [
+            0.764,
+            -0.276
+          ],
+          0.18
+        ]
+      ],
+      "seed": 2026090805,
+      "stratum": "clutter"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/06",
+      "id": "quintic_two/06",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            -0.135,
+            0.012
+          ],
+          0.388
+        ],
+        [
+          [
+            -1.818,
+            0.0
+          ],
+          0.18
+        ],
+        [
+          [
+            -0.563,
+            -0.144
+          ],
+          0.206
+        ]
+      ],
+      "seed": 2026090806,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/06",
+      "id": "quintic_four/06",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            -0.135,
+            0.012
+          ],
+          0.388
+        ],
+        [
+          [
+            -1.818,
+            0.0
+          ],
+          0.18
+        ],
+        [
+          [
+            -0.563,
+            -0.144
+          ],
+          0.206
+        ]
+      ],
+      "seed": 2026090806,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/06",
+      "id": "F2_reference/06",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            -0.135,
+            0.012
+          ],
+          0.388
+        ],
+        [
+          [
+            -1.818,
+            0.0
+          ],
+          0.18
+        ],
+        [
+          [
+            -0.563,
+            -0.144
+          ],
+          0.206
+        ]
+      ],
+      "seed": 2026090806,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/06",
+      "id": "cubic_two/06",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            -0.135,
+            0.012
+          ],
+          0.388
+        ],
+        [
+          [
+            -1.818,
+            0.0
+          ],
+          0.18
+        ],
+        [
+          [
+            -0.563,
+            -0.144
+          ],
+          0.206
+        ]
+      ],
+      "seed": 2026090806,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/07",
+      "id": "quintic_four/07",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.113,
+            -0.007
+          ],
+          0.42
+        ],
+        [
+          [
+            1.8,
+            0.0
+          ],
+          0.19
+        ],
+        [
+          [
+            0.758,
+            -0.296
+          ],
+          0.257
+        ]
+      ],
+      "seed": 2026090807,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/07",
+      "id": "F2_reference/07",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.113,
+            -0.007
+          ],
+          0.42
+        ],
+        [
+          [
+            1.8,
+            0.0
+          ],
+          0.19
+        ],
+        [
+          [
+            0.758,
+            -0.296
+          ],
+          0.257
+        ]
+      ],
+      "seed": 2026090807,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/07",
+      "id": "cubic_two/07",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.113,
+            -0.007
+          ],
+          0.42
+        ],
+        [
+          [
+            1.8,
+            0.0
+          ],
+          0.19
+        ],
+        [
+          [
+            0.758,
+            -0.296
+          ],
+          0.257
+        ]
+      ],
+      "seed": 2026090807,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/07",
+      "id": "quintic_two/07",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.113,
+            -0.007
+          ],
+          0.42
+        ],
+        [
+          [
+            1.8,
+            0.0
+          ],
+          0.19
+        ],
+        [
+          [
+            0.758,
+            -0.296
+          ],
+          0.257
+        ]
+      ],
+      "seed": 2026090807,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/08",
+      "id": "F2_reference/08",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.075,
+            -0.003
+          ],
+          0.378
+        ],
+        [
+          [
+            -1.75,
+            0.0
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.017,
+            -0.31
+          ],
+          0.234
+        ]
+      ],
+      "seed": 2026090808,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/08",
+      "id": "cubic_two/08",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.075,
+            -0.003
+          ],
+          0.378
+        ],
+        [
+          [
+            -1.75,
+            0.0
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.017,
+            -0.31
+          ],
+          0.234
+        ]
+      ],
+      "seed": 2026090808,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/08",
+      "id": "quintic_two/08",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.075,
+            -0.003
+          ],
+          0.378
+        ],
+        [
+          [
+            -1.75,
+            0.0
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.017,
+            -0.31
+          ],
+          0.234
+        ]
+      ],
+      "seed": 2026090808,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/08",
+      "id": "quintic_four/08",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.075,
+            -0.003
+          ],
+          0.378
+        ],
+        [
+          [
+            -1.75,
+            0.0
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.017,
+            -0.31
+          ],
+          0.234
+        ]
+      ],
+      "seed": 2026090808,
+      "stratum": "near_endpoint"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/09",
+      "id": "cubic_two/09",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.062,
+            -0.009
+          ],
+          0.382
+        ],
+        [
+          [
+            -2.0,
+            0.45
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.366,
+            0.01
+          ],
+          0.203
+        ]
+      ],
+      "seed": 2026090809,
+      "stratum": "outside_vertical_condition"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/09",
+      "id": "quintic_two/09",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.062,
+            -0.009
+          ],
+          0.382
+        ],
+        [
+          [
+            -2.0,
+            0.45
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.366,
+            0.01
+          ],
+          0.203
+        ]
+      ],
+      "seed": 2026090809,
+      "stratum": "outside_vertical_condition"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/09",
+      "id": "quintic_four/09",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.062,
+            -0.009
+          ],
+          0.382
+        ],
+        [
+          [
+            -2.0,
+            0.45
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.366,
+            0.01
+          ],
+          0.203
+        ]
+      ],
+      "seed": 2026090809,
+      "stratum": "outside_vertical_condition"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/09",
+      "id": "F2_reference/09",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.062,
+            -0.009
+          ],
+          0.382
+        ],
+        [
+          [
+            -2.0,
+            0.45
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.366,
+            0.01
+          ],
+          0.203
+        ]
+      ],
+      "seed": 2026090809,
+      "stratum": "outside_vertical_condition"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/10",
+      "id": "quintic_two/10",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.134,
+            0.022
+          ],
+          0.42
+        ],
+        [
+          [
+            -2.0,
+            0.5
+          ],
+          0.2
+        ],
+        [
+          [
+            0.603,
+            -0.23
+          ],
+          0.189
+        ]
+      ],
+      "seed": 2026090810,
+      "stratum": "outside_vertical_condition"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/10",
+      "id": "quintic_four/10",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.134,
+            0.022
+          ],
+          0.42
+        ],
+        [
+          [
+            -2.0,
+            0.5
+          ],
+          0.2
+        ],
+        [
+          [
+            0.603,
+            -0.23
+          ],
+          0.189
+        ]
+      ],
+      "seed": 2026090810,
+      "stratum": "outside_vertical_condition"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/10",
+      "id": "F2_reference/10",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.134,
+            0.022
+          ],
+          0.42
+        ],
+        [
+          [
+            -2.0,
+            0.5
+          ],
+          0.2
+        ],
+        [
+          [
+            0.603,
+            -0.23
+          ],
+          0.189
+        ]
+      ],
+      "seed": 2026090810,
+      "stratum": "outside_vertical_condition"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/10",
+      "id": "cubic_two/10",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.134,
+            0.022
+          ],
+          0.42
+        ],
+        [
+          [
+            -2.0,
+            0.5
+          ],
+          0.2
+        ],
+        [
+          [
+            0.603,
+            -0.23
+          ],
+          0.189
+        ]
+      ],
+      "seed": 2026090810,
+      "stratum": "outside_vertical_condition"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 4,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_four",
+      "geometry_id": "geometry/11",
+      "id": "quintic_four/11",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.002,
+            -0.008
+          ],
+          0.364
+        ],
+        [
+          [
+            -2.0,
+            0.55
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.925,
+            0.235
+          ],
+          0.202
+        ]
+      ],
+      "seed": 2026090811,
+      "stratum": "outside_vertical_condition"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 3,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "F2_reference",
+      "geometry_id": "geometry/11",
+      "id": "F2_reference/11",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.002,
+            -0.008
+          ],
+          0.364
+        ],
+        [
+          [
+            -2.0,
+            0.55
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.925,
+            0.235
+          ],
+          0.202
+        ]
+      ],
+      "seed": 2026090811,
+      "stratum": "outside_vertical_condition"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 3,
+        "eta": 1,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "cubic_two",
+      "geometry_id": "geometry/11",
+      "id": "cubic_two/11",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.002,
+            -0.008
+          ],
+          0.364
+        ],
+        [
+          [
+            -2.0,
+            0.55
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.925,
+            0.235
+          ],
+          0.202
+        ]
+      ],
+      "seed": 2026090811,
+      "stratum": "outside_vertical_condition"
+    },
+    {
+      "bc0": [
+        [
+          -2,
+          0
+        ]
+      ],
+      "bc1": [
+        [
+          2,
+          0
+        ]
+      ],
+      "family": {
+        "N": 2,
+        "d": 5,
+        "eta": 2,
+        "k": 1,
+        "l": 0
+      },
+      "family_label": "quintic_two",
+      "geometry_id": "geometry/11",
+      "id": "quintic_two/11",
+      "n": 2,
+      "obstacles": [
+        [
+          [
+            0.002,
+            -0.008
+          ],
+          0.364
+        ],
+        [
+          [
+            -2.0,
+            0.55
+          ],
+          0.2
+        ],
+        [
+          [
+            -0.925,
+            0.235
+          ],
+          0.202
+        ]
+      ],
+      "seed": 2026090811,
+      "stratum": "outside_vertical_condition"
+    }
+  ],
+  "scope": "Exploratory transfer on four existing certified k=1 families; matched geometries, not held-out or a broad family proof",
+  "source_hashes": {
+    "experiments/q1_families.py": "b6315046a5316d7d5bc74c2f8c6a39ad8432093f5e7a8de4b7c2632612060f01",
+    "experiments/q1_verify.py": "fecdaba6378e15986945c96c4b5560be889d9c1d96bdf9ed228bdd758efbcf5a",
+    "src/bernstein.py": "5b0f7cb3712ba6e47dee07e5d934659cc4248fd16ad716053da1963443eb2556",
+    "src/certified_multisegment.py": "ac3f5728d7f3dbdd67a43721735d8f0f44dc859be4f08c6d733d79d20d94edee",
+    "src/constructive_recovery.py": "813e004fb8f6806191dd51cd8e879afbacba59d1b70e17be26377dbc9491a7a2",
+    "src/escape_fold.py": "9afe8de6d92a4b036a875e3dee35b80ffd18e8fef9975f4004b74529e74137c3",
+    "src/exact_api.py": "942a37f3c0d5a5990cd118ecc9f595ae85a72c576cbca16c014d471396929caa",
+    "src/exact_check.py": "665f39d13e8739172d2cd087e7a4152dd855b1e5c1a1c6bc7bfac43bfbeb313e",
+    "src/exact_green.py": "2b588028fe21da715f538328d5c276f54cb55ef71c47af6b6abbacfab5a1ef5b",
+    "src/exact_sdp_bounds.py": "bed96f965f4aba10346e20de7b0f15a86ebaef524d370d1b94ed3c4559c0c085",
+    "src/mlukacs.py": "d12b8b77fde25818e9dad6dc9c774b552cabc9117ad7758b6db08bf2c80647bc",
+    "src/multisegment.py": "24cdea034b3238c5653b08adf220cc4da43f35df415a903b6c299454331677b9",
+    "src/q1_independent.py": "8a9ba48164a0ca60dcd9b5eb2d09ea717f5672b317688aa6bf1a00bf491ab67e",
+    "src/q1_recovery.py": "4ab488f8dadd2d50706da3cd7666e97d91bf4e902b88f0ca0e4d4dc175ad3b09"
+  }
+}

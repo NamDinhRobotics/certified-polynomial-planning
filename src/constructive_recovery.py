@@ -9,6 +9,7 @@ from fractions import Fraction as F
 from math import comb
 import time
 import numpy as np
+from exact_api import rational_scalar, exact_service
 from escape_fold import (rational,escape_fold,physical_certificate,green_representer)
 from exact_green import q_gram_deriv
 
@@ -35,6 +36,7 @@ def coefficients(f,Y):
     return (f.G0q+rational(Y)@f.Qq.T).reshape(f.n,f.ms.N,f.d+1).transpose(1,0,2)
 
 
+@exact_service
 def outcome(G,obs,k=1,**info):
     if G is None:return dict(ok=False,reason='no_candidate',**info)
     if not physical_certificate(G,obs):return dict(ok=False,reason='strict_gate_rejected',**info)
@@ -43,17 +45,21 @@ def outcome(G,obs,k=1,**info):
 
 
 def endpoint_separation(G,obs,axis=1,margin=1e-8):
-    G=rational(G);axes=[j for j in range(G.shape[1]) if j!=axis]
+    G=rational(G)
+    if not 0<=axis<G.shape[1] or margin<=0:raise ValueError('direction/margin')
+    axes=[j for j in range(G.shape[1]) if j!=axis]
     margins=[]
     for center,radius in obs:
-        c=rational(center);R=F(float(radius))+F(float(margin))
+        c=rational(center);R=rational_scalar(radius)+rational_scalar(margin)
         for p in (G[0,:,0],G[-1,:,-1]):margins.append(sum((p[j]-c[j])**2 for j in axes)-R**2)
     return min(margins) if margins else F(1)
 
 
+@exact_service
 def recover_modes(f,exact,Y,v,obs,polish_steps=12,axis=1,margin=1e-8):
     """One measured call, including sign tests, both modes and exact checks."""
     start=time.perf_counter();G=coefficients(f,Y);plain=outcome(G,obs,f.ms.k,method='plain')
+    if plain.get('status')=='UNKNOWN_EXACT_CHECK':return plain
     if plain['ok']:
         plain.update(ms=1000*(time.perf_counter()-start),plain_strict=True,modes=[])
         return plain
@@ -86,7 +92,7 @@ def recover_modes(f,exact,Y,v,obs,polish_steps=12,axis=1,margin=1e-8):
     if candidates:
         J,gg,name,sign,t=min(candidates,key=lambda x:x[0])
         ans=outcome(gg,obs,f.ms.k,method=name,sign=sign,amplitude=fraction(t))
-        assert F(*map(int,ans['cost_exact']))==J
+        if ans['ok']:assert F(*map(int,ans['cost_exact']))==J
     else:ans=dict(ok=False,reason='sufficient_recovery_unknown',method='unknown')
     ans.update(ms=1000*(time.perf_counter()-start),plain_strict=False,modes=records)
     return ans

@@ -9,6 +9,7 @@ from fractions import Fraction as F
 from math import comb, nextafter, inf
 import time
 import numpy as np
+from exact_api import rational_scalar, exact_service
 
 from exact_green import q_gram_deriv, matmul, transpose, zeros, solve
 from exact_check import (_sq_norm_poly, _add, _scale,
@@ -16,7 +17,7 @@ from exact_check import (_sq_norm_poly, _add, _scale,
 
 
 def rational_array(a):
-    return np.asarray([F(float(v)) for v in np.asarray(a).ravel()],
+    return np.asarray([rational_scalar(v) for v in np.asarray(a,dtype=object).ravel()],
                       dtype=object).reshape(np.asarray(a).shape)
 
 
@@ -84,7 +85,7 @@ class ExactSDPBounds:
             for center,radius in obstacles:
                 delta = gi-rational_array(center)[:,None]
                 B.append(np.asarray([delta@S@qi for S in self.S],dtype=object))
-                c.append([np.sum((delta@S)*delta)-F(float(radius))**2 for S in self.S])
+                c.append([np.sum((delta@S)*delta)-rational_scalar(radius)**2 for S in self.S])
         return np.asarray(B,dtype=object),np.asarray(c,dtype=object)
 
     def lower(self, multipliers, obstacles):
@@ -107,7 +108,8 @@ class ExactSDPBounds:
         """A strictly feasible lifted curve with W=Y'Y+vv'+shift*I.
 
         Adding shift changes only the gap, preserving the exact affine boundary
-        data and the SDP objective. It need not preserve a rank-one gap, and the
+        data and objective functional; its objective value increases by shift*trace(K).
+        It need not preserve a rank-one gap, and the
         amount and its exact energy cost are reported, never hidden.
         """
         Y,v,_,_ = self.factor.unpack(z)
@@ -115,7 +117,7 @@ class ExactSDPBounds:
 
     def upper_point(self, Y, V, obstacles, shift):
         Y,V = rational_array(Y),rational_array(V)
-        shift = F(float(shift))
+        shift = rational_scalar(shift)
         if shift < 0:
             return None
         Gamma = self.G0+Y@self.Q.T
@@ -129,13 +131,14 @@ class ExactSDPBounds:
             for center,radius in obstacles:
                 delta = Gamma[:,sl]-rational_array(center)[:,None]
                 p = _add(_sq_norm_poly(delta.tolist(),self.factor.d),lift)
-                p[0] -= F(float(radius))**2
+                p[0] -= rational_scalar(radius)**2
                 if not positive_on_unit_interval_fast(p):
                     return None
                 n_polys += 1
         cost = self.c0+2*np.sum(self.C*Y)+np.sum((Y@self.K)*Y)+np.sum((V@self.K)*V)+shift*np.trace(self.K)
         return cost,n_polys
 
+    @exact_service
     def verify(self, z, multipliers, obstacles, max_relative_gap=1e-5, point=None):
         start = time.perf_counter()
         lower = self.lower(multipliers,obstacles)
@@ -146,8 +149,8 @@ class ExactSDPBounds:
             if upper is not None:
                 value,npolys = upper
                 gap = (value-lower)/max(F(1),abs(value))
-                return dict(ok=bool(0 <= gap <= F(float(max_relative_gap))),
-                            reason='bounds' if 0 <= gap <= F(float(max_relative_gap)) else 'gap_too_large',
+                return dict(ok=bool(0 <= gap <= rational_scalar(max_relative_gap)),
+                            reason='bounds' if 0 <= gap <= rational_scalar(max_relative_gap) else 'gap_too_large',
                             lower_exact=fraction_record(lower),upper_exact=fraction_record(value),
                             lower=nextafter(float(lower),-inf),upper=nextafter(float(value),inf),
                             relative_gap_upper=nextafter(float(gap),inf),shift=shift,

@@ -33,10 +33,8 @@ def main():
     assert documents[1]['protocol']['first_stage_sha256']==hashlib.sha256(paths[0].read_bytes()).hexdigest()
     for d in documents:
         for name,h in d['protocol']['source_hashes'].items():
-            p=ROOT/name
-            if hashlib.sha256(p.read_bytes()).hexdigest()!=h:
-                p=ROOT/'provenance'/Path(name).name
-            assert p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest()==h,(name,h)
+            from executed_source import checked_source
+            p=checked_source(ROOT,name,h)
             hashes.append(str(p.relative_to(ROOT)))
     data=json.loads((ROOT/'artifacts/revision_certified_solver.json').read_text())
     original={(r['seed'],r['step']):r for r in data['rows'] if r['repeat']==0}

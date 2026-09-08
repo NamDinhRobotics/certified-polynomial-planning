@@ -291,23 +291,98 @@ class CertifiedSpline:
             z[self.a1+i*self.d:self.a1+(i+1)*self.d] = b
         return z, solution['lam'].copy()
 
-    def solve(self, obstacles):
-        start = time.perf_counter()
+    def solve(self, obstacles, local_iterations=12, use_warm_start=True):
+        """Diagnose a local candidate, then dispatch to an independent SDP.
+
+        A valid conic answer survives failure to construct the next warm seed.
+        In that case ``ok`` is true, ``conic`` holds the answer and ``z`` is None.
+        A numerical conic failure returns an explicit no-answer, never stale z.
+        """
+        begin = time.perf_counter()
+        from cvxpy.error import SolverError
+        from exact_check import ExactCheckError
+        numerical = (np.linalg.LinAlgError, la.LinAlgWarning, ValueError,
+                     FloatingPointError, OverflowError, SolverError, ExactCheckError)
         self.update(obstacles)
+        update_ms = 1000*(time.perf_counter()-begin)
         local_ms, it, status = 0., 0, 'cold'
-        if self.z is not None:
+        verdict = point = None
+        failed, gates = [], {}
+        if self.z is not None and use_warm_start and local_iterations:
             t = time.perf_counter()
-            z, lam, it, status = self.newton(self.z, self.lam)
-            verdict = self.assess(z, lam)
+            try:
+                z, lam, it, status = (self.newton(self.z, self.lam) if local_iterations == 12 else
+                                      self.newton(self.z, self.lam, maxiter=local_iterations))
+                # Retain the returned point even if its later assessment fails.
+                point = dict(z=z.copy(), lam=lam.copy())
+                verdict = self.assess(z, lam)
+                finite = bool(np.isfinite(z).all() and np.isfinite(lam).all())
+                gates['finite_candidate'] = finite
+                if verdict.get('reason') == 'nonfinite_candidate' or not finite:
+                    failed.append('nonfinite_candidate')
+                    gates.update(equality_residual=None, stationarity=None,
+                                 dual_bound=None, objective_gap=None)
+                else:
+                    residual, stationarity = verdict.get('residual'), verdict.get('stationarity')
+                    gap, bound = verdict.get('relative_gap'), verdict.get('bound')
+                    gates.update(
+                        equality_residual=None if residual is None else bool(np.isfinite(residual) and residual<=1e-7),
+                        stationarity=None if stationarity is None else bool(np.isfinite(stationarity) and stationarity<=1e-6),
+                        dual_bound=None if bound is None else bool(bound['ok']),
+                        objective_gap=None if gap is None else bool(np.isfinite(gap) and -1e-8<=gap<=1e-5))
+                    failed.extend(name for key,name in (
+                        ('equality_residual','equality_residual'),('stationarity','stationarity'),
+                        ('dual_bound','dual_bound_failure'),('objective_gap','objective_gap')) if gates[key] is False)
+                    if any(value is None for value in gates.values()):
+                        failed.append('local_assessment_incomplete')
+            except numerical as exc:
+                status = 'local_numerical_failure'
+                verdict = dict(ok=False, reason=status, exception_type=type(exc).__name__, detail=str(exc))
+                failed = [status]
+                gates = dict(finite_candidate=None, equality_residual=None,
+                             stationarity=None, dual_bound=None, objective_gap=None)
             local_ms = 1000*(time.perf_counter()-t)
-            if verdict['ok']:
+            if verdict['ok'] and not failed:
                 self.z, self.lam = z, lam
                 return dict(ok=True, source='factor', z=z, lam=lam,
-                            total_ms=1000*(time.perf_counter()-start), local_ms=local_ms,
-                            iterations=it, local_status=status, **{k:v for k,v in verdict.items() if k!='ok'})
-        fallback = self.conic()
+                            total_ms=1000*(time.perf_counter()-begin), local_ms=local_ms,
+                            update_ms=update_ms, conic_ms=0., initialization_ms=0.,
+                            iterations=it, local_status=status, local_assessment=verdict,
+                            local_gate_results=gates, rejected_local_point=None,
+                            dispatch_reason='local_accepted', failed_gates=[],
+                            seed_status='local_candidate',
+                            **{k:v for k,v in verdict.items() if k!='ok'})
+            if not failed:
+                failed = ['local_assessment_rejected']
+        else:
+            failed = ['cold_initialization' if self.z is None else
+                      'warm_start_disabled' if not use_warm_start else 'local_budget_zero']
+        t = time.perf_counter()
+        try:
+            fallback = self.conic()
+        except numerical as exc:
+            fallback = dict(ok=False, status='conic_numerical_failure',
+                            exception_type=type(exc).__name__, detail=str(exc))
+        conic_ms = 1000*(time.perf_counter()-t)
+        t = time.perf_counter()
+        # A rejected or stale warm point must never be returned as an answer.
+        self.z = self.lam = None
+        seed_status, seed_error = 'not_attempted', None
         if fallback['ok']:
-            self.z, self.lam = self.seed(fallback)
-        return dict(ok=fallback['ok'], source='conic', total_ms=1000*(time.perf_counter()-start),
-                    local_ms=local_ms, iterations=it, local_status=status,
-                    conic=fallback, z=self.z.copy() if fallback['ok'] else None)
+            try:
+                z, lam = self.seed(fallback)
+                if not np.isfinite(z).all() or not np.isfinite(lam).all():
+                    raise ValueError('nonfinite warm seed')
+                self.z, self.lam = z, lam
+                seed_status = 'ready'
+            except numerical as exc:
+                seed_status = 'numerical_failure'
+                seed_error = dict(exception_type=type(exc).__name__, detail=str(exc))
+        initialization_ms = 1000*(time.perf_counter()-t)
+        return dict(ok=fallback['ok'], source='conic', total_ms=1000*(time.perf_counter()-begin),
+                    local_ms=local_ms, update_ms=update_ms, conic_ms=conic_ms,
+                    initialization_ms=initialization_ms, iterations=it, local_status=status,
+                    local_assessment=verdict, rejected_local_point=point,
+                    local_gate_results=gates, dispatch_reason=failed[0], failed_gates=failed,
+                    seed_status=seed_status, seed_error=seed_error, conic=fallback,
+                    z=None if self.z is None else self.z.copy())

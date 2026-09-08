@@ -8,12 +8,13 @@ from fractions import Fraction as F
 from math import comb
 import time
 import numpy as np
+from exact_api import rational_scalar, exact_service
 from exact_check import _sq_norm_poly, bern_to_power, positive_on_unit_interval_fast
 
 
 def rational(a):
     a = np.asarray(a, dtype=object)
-    return np.asarray([v if isinstance(v,F) else F(float(v)) for v in a.flat],dtype=object).reshape(a.shape)
+    return np.asarray([rational_scalar(v) for v in a.flat],dtype=object).reshape(a.shape)
 
 
 def split(a):
@@ -46,7 +47,7 @@ def physical_certificate(Gamma,obstacles):
     for g in Gamma:
         for center,radius in obstacles:
             p=_sq_norm_poly((g-rational(center)[:,None]).tolist(),g.shape[-1]-1)
-            p[0]-=F(float(radius))**2
+            p[0]-=rational_scalar(radius)**2
             if not positive_on_unit_interval_fast(p):return False
     return True
 
@@ -59,6 +60,7 @@ def _box_distance_squared(coeffs,axes):
     return out
 
 
+@exact_service
 def escape_fold(Gamma,z,obstacles,axis=1,sign=1,margin=1e-8,max_depth=24,max_nodes=10000):
     """Return rational amplitude, normalized lift, curve and finite cell proof.
 
@@ -82,13 +84,13 @@ def escape_fold(Gamma,z,obstacles,axis=1,sign=1,margin=1e-8,max_depth=24,max_nod
     if not positive_lift(z):return fail('lift_sign_not_certified')
     axes=[j for j in range(Gamma.shape[1]) if j!=axis]
     for center,radius in obstacles:
-        c=rational(center);R=F(float(radius))+F(float(margin))
+        c=rational(center);R=rational_scalar(radius)+rational_scalar(margin)
         for p in (Gamma[0,:,0],Gamma[-1,:,-1]):
             if sum((p[j]-c[j])**2 for j in axes)<=R*R:return fail('endpoint_lines_not_separated')
     amplitude=F(0);nodes=0;leaves=0;depth_used=0
     for i,g in enumerate(Gamma):
         for center,radius in obstacles:
-            delta=g-rational(center)[:,None];R=F(float(radius))+F(float(margin))
+            delta=g-rational(center)[:,None];R=rational_scalar(radius)+rational_scalar(margin)
             stack=[(delta,z[i],0)]
             while stack:
                 dd,zz,depth=stack.pop();nodes+=1;depth_used=max(depth_used,depth)

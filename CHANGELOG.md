@@ -1,4 +1,26 @@
-# 2026-09-08 revised evidence export
+# 2026-09-08 Q1 technical revision
+
+This revision fixes exact rational input preservation, local-solver exception
+fallback, and warm-seed failure handling. It adds complete controlled evidence:
+240 reference/mode cases, 1,000 integrated calls, 480 budget/warm-use calls,
+48 family-transfer cases, and diagnostics for 1,250 repair inputs.
+
+The independent physical audit checks complete populations, exact input binding,
+affine constraints, energy, cell covers and workspace inequalities. SDP replay
+uses the actual serialized conic witnesses. Mutation and regression controls
+reject malformed certificates and preserve UNKNOWN for exhausted checks.
+
+Bubble often outperforms Green in recovered energy. The conservative workspace
+tail adds no new recovered success in this population. Complete-return physical
+and objective times include their exact checks and serialization. These results
+do not imply universal runtime or full-planner superiority.
+
+Recorded historical artifacts remain byte-identical. Exact historical source
+versions live under their recorded SHA-256 in `executed_sources/`; current `src/`
+contains the corrected implementation. See `EXECUTED_SOURCES.md` and
+`Q1_REPRODUCTION.md`. No manuscript, LaTeX, response or review record is published.
+
+## Earlier 2026-09-08 five-reviewer evidence export
 
 This update synchronizes the public reproduction material with the revised
 manuscript. It contains code, recorded numerical data, figure-generation

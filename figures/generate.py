@@ -13,3 +13,8 @@ data=revision_claims.load()
 make_revision_results.plot(data);make_tiny_figures.plot_all(data);replanning_results.plot(data)
 certified_results.plot();make_recovery_addendum.plot();recovery_results.plot();quadrotor_results.plot()
 print('All ten figures regenerated in results/figures; original datasets retained.')
+
+import q1_results
+q1_results.P=out
+q1_results.main()
+print("Q1 figures, tables and derived claims regenerated from retained data.")

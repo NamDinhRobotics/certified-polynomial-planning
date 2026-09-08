@@ -8,6 +8,21 @@ solver for the same SDP as the conic reference, rational primal/dual checks,
 and physical-curve recovery. The quadrotor example separates the certified
 reference trajectory from its measured MuJoCo tracking performance.
 
+## Q1 revision evidence
+
+The current source fixes rational-radius preservation, numerical fallback and
+warm-seed failure handling. The complete follow-up contains 240 reference/mode
+cases, 1,000 integrated calls, 480 budget/warm-use calls, and 48 family-transfer
+cases. All outcomes, including unfavorable energy tails and failures, are retained.
+See [Q1_REPRODUCTION.md](Q1_REPRODUCTION.md) for the exact commands and scope.
+Historical executed source versions are preserved by their recorded SHA-256;
+current src contains the corrected APIs. Use both the legacy and Q1 audits.
+
+The controlled comparison finds that bubble often outperforms Green in recovered
+energy. Workspace-tail construction adds no repaired success on the 240-case
+population. These are disclosed limitations, not omitted cases. Manuscript,
+LaTeX, response letters and editorial/reviewer records remain private.
+
 ## Verify the delivered results
 
 Use Python 3.12 and run from the repository root:
@@ -115,7 +130,7 @@ for fresh serial runs. Never run timing experiments alongside rendering/tests.
 The documented NumPy backend is enforced in the latter runner.
 
 Install `requirements-figures.txt`, then run `python figures/generate.py` to
-regenerate the ten retained scientific figures from the delivered data in
+regenerate the ten historical scientific figures and the two new Q1 figures from the delivered data in
 `results/figures`. Set writable `MPLCONFIGDIR` and `XDG_CACHE_HOME` if needed.
 Run `python figures/peer_review_results.py` to recompute the added numerical
 claims in `results/followup` (JSON plus generated numeric LaTeX macros).

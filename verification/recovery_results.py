@@ -33,7 +33,9 @@ def validate(fresh,pop):
     require(pop['protocol']['per_stratum']==40 and pop['protocol']['strata']==STRATA,'stratum counts')
     require(pop['protocol']['margin']==1e-8 and 'zero tolerance' in pop['protocol']['gate'],'margin/gate')
     for name,h in pop['source_hashes'].items():
-        p=ROOT/name;require(p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest()==h,'executed source '+name)
+        from executed_source import checked_source
+        try:checked_source(ROOT,name,h)
+        except AssertionError:require(False,'executed source '+name)
     for index,(row,input_) in enumerate(zip(fresh['rows'],pop['rows'])):
         for key in ('id','stratum','n','seed','obstacles'):require(row[key]==input_[key],'input mismatch '+str(index)+' '+key)
         require(set(row['arms'])==set(ARMS),'arm set '+row['id'])
