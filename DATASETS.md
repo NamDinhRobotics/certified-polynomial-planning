@@ -31,3 +31,9 @@ Some original provenance records name source modules from the larger research
 workspace. Their hashes are retained as recorded metadata; unrelated module
 contents and workspace history are not distributed here. Timing records refer
 to the recorded machine and software configuration, not universal performance.
+
+`review_affine_green.json` and its protocol contain all 240 direct/refined
+outcomes; `review_numpy_solver.json` and protocol contain a separate 3,000-pair
+NumPy run and 2,000 rational intervals. These are post-review replications on
+previously seen inputs, not additional held-out populations. Original files
+are byte-preserved.

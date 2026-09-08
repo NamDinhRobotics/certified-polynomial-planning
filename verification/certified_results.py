@@ -108,6 +108,7 @@ def compute(x):
     s['factor_calls']=sum(r['factor']['source']=='factor' for r in rows)
     s['fallback_calls']=len(rows)-s['factor_calls']
     s['cold_calls']=sum(r['step']==0 for r in rows)
+    # Legacy key: ratio of marginal medians, not median of per-pair ratios.
     s['median_ratio']=s['reference']['time']['p50']/s['factor']['time']['p50']
     s['aggregate_ratio']=s['reference']['total_ms']/s['factor']['total_ms']
     s['setup_inclusive_aggregate_ratio']=(s['reference']['total_ms']+sum(r['reference_ms'] for r in x['setup']))/(s['factor']['total_ms']+sum(r['factor_ms'] for r in x['setup']))

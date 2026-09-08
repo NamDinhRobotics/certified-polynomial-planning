@@ -27,12 +27,13 @@ so the block, and therefore every coefficient of it, is unchanged.  We may
 compute in ANY exact basis of the same null space and get the same answer as
 the float pipeline is approximating -- which `a12` checks numerically.
 
-WHAT EXACTNESS BUYS, PRECISELY.  A nonnegative coefficient array certifies
-`Gr >= 0`, and a coefficient array with a POSITIVE minimum certifies
-`Gr >= min > 0`, because the Bernstein coefficients bound the polynomial from
-below by their minimum on the whole square.  The second is what the corrected
-Theorem needs -- entrywise nonnegativity alone leaves the Gram matrix possibly
-reducible, and Perron-Frobenius then gives no simple top eigenvalue.
+WHAT EXACTNESS BUYS, PRECISELY. Nonnegative, nonzero Bernstein blocks
+certify positivity on the open square. Strict positivity at all LIVE pairs
+also requires nonzero live endpoint rows/columns and positive live corners;
+use endpoint_structure with the block and positive-definite K checks.
+A positive minimum of the entire coefficient array is stronger than needed:
+pinned endpoints legitimately give zero coefficients. The returned `strict`
+flag is a uniform coefficient bound, not the theorem's necessary criterion.
 """
 from fractions import Fraction as F
 from math import comb, factorial
@@ -328,10 +329,10 @@ def endpoint_structure(d, k, l, N, eta):
 def certify_exact(d, k, l, N, eta, D=96):
     """Exact verdict for one configuration.
 
-    `strict` is the property the corrected Theorem needs: a POSITIVE minimum
-    bounds the Green's function away from zero on the whole square, hence gives
-    an entrywise positive Gram matrix at any contact set, hence irreducibility,
-    hence a simple top eigenvalue.  `nonneg` alone leaves reducibility open.
+    `strict` is a stronger uniform positive coefficient-minimum test.
+    It is not required for positivity at live pairs: nonnegative nonzero
+    blocks together with endpoint_structure can certify that property even
+    when pinned endpoints make the coefficient minimum zero.
     """
     blocks, r = coefficient_blocks(d, k, l, N, eta)
     scale = max([F(1)] + [abs(x) for B in blocks.values() for row in B

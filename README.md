@@ -17,6 +17,7 @@ python -m venv .venv
 . .venv/bin/activate
 python -m pip install -r requirements.txt
 python verify.py --full --mutations --output results/verification.json
+python verify_peer_review.py --full --output results/followup_verification.json
 python -m pytest -q tests
 ```
 
@@ -41,7 +42,8 @@ quadrotor checks are reported separately.
 
 ## Regenerate the quadrotor demonstration
 
-The delivered flight is one deterministic simulated inspection scenario. New
+The delivered flight is one deterministic simulated transit motivated by inspection;
+it does not demonstrate inspection coverage. New
 outputs go to `results/quadrotor`; the recorded evidence in `demo/` is retained.
 
 ```sh
@@ -93,6 +95,38 @@ replays those stored comparisons; it does not regenerate their executable
 measurements. `provenance/escape_fold.py` is the earlier implementation needed
 to check the development-recovery source hash.
 
-The solver uses the NumPy implementation. Optional native acceleration and its
-build helpers are omitted. Verification does not require a C compiler, LaTeX,
+The delivered solver defaults to NumPy. The original timing protocol did not
+record whether its optional native polishing was active. The separate
+review_numpy_solver run explicitly forces NumPy and records that backend;
+its results are not substituted for the archived measurements. Verification does not require a C compiler, LaTeX,
 Blender or a video renderer.
+
+## Post-review additions
+
+All 240 original geometries were reused in an exploratory direct-Green and
+one-step feasible-seed corridor follow-up. New outputs retain failures and
+the full large energy tail. This corridor adaptation is not SIP or BMTP.
+
+Run `python verify_peer_review.py --full` to replay all 320 new strict
+physical outputs and 2,000 new NumPy SDP intervals. Run
+`python experiments/review_affine_green.py --out results/direct_green.json`
+or `python experiments/review_numpy_solver.py --out results/numpy_sdp.json`
+for fresh serial runs. Never run timing experiments alongside rendering/tests.
+The documented NumPy backend is enforced in the latter runner.
+
+Install `requirements-figures.txt`, then run `python figures/generate.py` to
+regenerate the ten retained scientific figures from the delivered data in
+`results/figures`. Set writable `MPLCONFIGDIR` and `XDG_CACHE_HOME` if needed.
+Run `python figures/peer_review_results.py` to recompute the added numerical
+claims in `results/followup` (JSON plus generated numeric LaTeX macros).
+The quadrotor figure uses delivered rendered stills and audited logs. The
+complete Blender/video production pipeline is not part of this artifact.
+The separate schematic in the manuscript is a LaTeX drawing, not data.
+
+## Revision correspondence
+
+This export matches the code and recorded evidence for the manuscript revision
+of 2026-09-08. See [CHANGELOG.md](CHANGELOG.md) for the additions and limitations.
+The Git commit and `MANIFEST.json` identify the exact public artifact version.
+The manuscript, its LaTeX sources, submission packages and internal reviews
+remain private and are not distributed in this repository.

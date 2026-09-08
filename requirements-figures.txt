@@ -1,0 +1,3 @@
+# Optional figure regeneration; install requirements.txt first.
+matplotlib==3.11.1
+Pillow==12.3.0

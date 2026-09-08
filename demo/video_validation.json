@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "video": "polynomial_quadrotor_3d.mp4",
+  "sha256": "97a97b6400f5f8d60d16acc058600700af1f3b3e6ad5157e3e5bd9c7fc7b350a",
+  "bytes": 7515860,
+  "duration": "64.000000",
+  "width": 1920,
+  "height": 1080,
+  "fps": "24/1",
+  "decoded_frames": 1536,
+  "full_audio_video_decode": "passed; ffmpeg 7.1.1, 2026-09-08",
+  "scope": "Recompressed delivery: complete decode and stream metadata checked locally. Historical visual QA is retained separately below; it is not a new visual-similarity measurement.",
+  "historical_original_video_validation": {
+    "passed": true,
+    "video": "polynomial_quadrotor_3d.mp4",
+    "sha256": "6468a4521f95b956f6d66531e6673e0f85db7a4e6482d25d7af2dbc56bbc4927",
+    "bytes": 35760464,
+    "duration": "64.000000",
+    "width": 1920,
+    "height": 1080,
+    "fps": "24/1",
+    "decoded_frames": 1536,
+    "full_audio_video_decode": "passed",
+    "caption_languages": [
+      "English",
+      "Vietnamese"
+    ],
+    "synthetic_narration": "macOS Samantha",
+    "qa_frame_times": [
+      2,
+      6,
+      10,
+      16,
+      18,
+      21,
+      24,
+      26,
+      31,
+      34,
+      38,
+      42,
+      47,
+      51,
+      57,
+      60
+    ],
+    "input_sha256": {
+      "planning.json": "930ae927aa6d959947483de1ee2d75a085fad5b780bb6252f2eab712654e6ddb",
+      "tracking.json": "d2c217f5afac59cf086d365f2788d8f90dd3c1e8636ee136b0be50474e9c2428",
+      "tracking_validation.json": "3ebb8e4497299f513461b3dc7ee3cebb6bba01af60a0216d83c8b68dea0213b0",
+      "render_demo.py": "94f3f0269296eed2ff24da942ba5ad16eaee13d68d0714b877bcc479f504ba23",
+      "compose_video.py": "44addf0c6811450b3a6d1e71f73619f841c40bb55e1e1dfe8587a1c6eb8ef5dd",
+      "narration.wav": "ac1ab5fa598a7f982d38ab21ec45f3b21b6eee28dc765a7e9183b2784a5dc9ce"
+    }
+  }
+}
