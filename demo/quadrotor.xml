@@ -1,0 +1,17 @@
+<mujoco model="generic inspection quadrotor">
+  <compiler angle="radian"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="RK4"/>
+  <worldbody>
+    <geom name="floor" type="plane" size="10 10 .1"/>
+    <geom name="obstacle_0" type="sphere" pos="-1.6600012480380102 0.7000244325058412 1.4149999375980997" size="0.34"/>
+<geom name="obstacle_1" type="sphere" pos="-0.9300003282231044 0.27986030970085457 1.534999983588845" size="0.39"/>
+<geom name="obstacle_2" type="sphere" pos="1.214306433183765e-17 0.12 1.45" size="0.44"/>
+<geom name="obstacle_3" type="sphere" pos="0.9200003282231043 -0.5198603097008546 1.5650000164111553" size="0.38"/>
+<geom name="obstacle_4" type="sphere" pos="1.6800012480380098 -0.5600244325058412 1.5450000624019002" size="0.32"/>
+    <body name="quad" pos="-3.0 0.0 1.35">
+      <freejoint/>
+      <inertial pos="0 0 0" mass="0.6" diaginertia=".003 .003 .005"/>
+      <geom name="body_envelope" type="sphere" size="0.23"/>
+    </body>
+  </worldbody>
+</mujoco>

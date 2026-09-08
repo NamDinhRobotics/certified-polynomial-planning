@@ -1,0 +1,51 @@
+{
+  "mujoco_version": "3.3.2",
+  "mass": 0.6,
+  "arm": 0.14,
+  "max_rotor_thrust": 3.3,
+  "motor_time_constant": 0.018,
+  "controller_hz": 200,
+  "physics_hz": 1000,
+  "wind": "0.12 N lateral Gaussian pulse, sigma 0.55 s, centered at 52% of flight",
+  "primary": {
+    "max_error": 0.0231590019083205,
+    "min_body_clearance": 0.16027213525197195,
+    "min_floor_clearance": 1.12,
+    "max_speed": 1.8709042318318643,
+    "max_tilt_deg": 7.369797763460284,
+    "max_rotor_thrust": 1.7529750897690966,
+    "saturated_updates": 0,
+    "contact_steps": 0,
+    "final_position_error": 6.225791926353205e-05,
+    "final_speed": 0.00011611161645708888,
+    "steps": 11001,
+    "dt": 0.001,
+    "within_allocated_tracking_reserve": true,
+    "wall_seconds": 0.5343459169998823,
+    "passed": true
+  },
+  "half_step": {
+    "max_error": 0.02319404402071607,
+    "min_body_clearance": 0.16027582832320134,
+    "min_floor_clearance": 1.12,
+    "max_speed": 1.870868537391543,
+    "max_tilt_deg": 7.369642211241461,
+    "max_rotor_thrust": 1.7536805837848344,
+    "saturated_updates": 0,
+    "contact_steps": 0,
+    "final_position_error": 6.2908214945783e-05,
+    "final_speed": 0.00011745126386974486,
+    "steps": 22001,
+    "dt": 0.0005,
+    "within_allocated_tracking_reserve": true,
+    "wall_seconds": 0.8912259170001562,
+    "passed": true
+  },
+  "integration_sensitivity": {
+    "max_error_difference": 3.5042112395571035e-05,
+    "min_clearance_difference": 3.6930712293825607e-06
+  },
+  "planning_sha256": "930ae927aa6d959947483de1ee2d75a085fad5b780bb6252f2eab712654e6ddb",
+  "source_sha256": "38389d7c3f06dcc63c59c2449c5c2d56eb55ecb05ad8719b03fd12c49853b62a",
+  "scope": "Numerical 6-DOF rigid-body simulation with four lagged, bounded rotors. Sampled executed clearance and tracking error are not formal continuous-time bounds. Generic model, not calibrated hardware."
+}

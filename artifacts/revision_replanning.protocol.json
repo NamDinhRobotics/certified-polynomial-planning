@@ -1,0 +1,73 @@
+{
+ "scenes": [
+  "frozen_barrier",
+  "sweeping_barrier",
+  "vertical_gate",
+  "chord1",
+  "chord2",
+  "chord3"
+ ],
+ "arms": [
+  "sdp",
+  "kkt_one_margin1.5",
+  "kkt_iterated_margin1.5"
+ ],
+ "guides": [
+  {
+   "name": "nominal",
+   "env": {}
+  },
+  {
+   "name": "straight",
+   "env": {
+    "TINYSDP_REVIEW_STRAIGHT": 1
+   }
+  },
+  {
+   "name": "offset0",
+   "env": {
+    "TINYSDP_REVIEW_GUIDE_DY": -0.5925962865773111,
+    "TINYSDP_REVIEW_GUIDE_DZ": -0.012512101261820785
+   }
+  },
+  {
+   "name": "offset1",
+   "env": {
+    "TINYSDP_REVIEW_GUIDE_DY": 0.19202112529189508,
+    "TINYSDP_REVIEW_GUIDE_DZ": -0.055654260559068414
+   }
+  },
+  {
+   "name": "offset2",
+   "env": {
+    "TINYSDP_REVIEW_GUIDE_DY": -0.2273918995885389,
+    "TINYSDP_REVIEW_GUIDE_DZ": -0.22206947423136159
+   }
+  },
+  {
+   "name": "offset3",
+   "env": {
+    "TINYSDP_REVIEW_GUIDE_DY": 0.5359818602134074,
+    "TINYSDP_REVIEW_GUIDE_DZ": 0.5002089313386759
+   }
+  },
+  {
+   "name": "offset4",
+   "env": {
+    "TINYSDP_REVIEW_GUIDE_DY": 0.38641562696324594,
+    "TINYSDP_REVIEW_GUIDE_DZ": 0.7766668698130899
+   }
+  }
+ ],
+ "runs_per_cell": 1,
+ "common_env": {
+  "TINYSDP_3D_REPLAN_STRIDE": 1,
+  "TINYSDP_REVIEW_PRECISION": 1
+ },
+ "seed": 20260907,
+ "perturbation": "one fixed transverse offset per guide, shared by all its interior waypoints",
+ "offset_distribution": "PCG64 uniform [-1,1] metres, five dy/dz pairs",
+ "terminal_policy": "inherited tracker; no further replanning inside 1 m capture radius",
+ "dense_subdivisions": 64,
+ "dense_check_is_certificate": false
+}
