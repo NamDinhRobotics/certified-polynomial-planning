@@ -1,2 +1,0 @@
-# Only required to regenerate the MuJoCo flight; not needed for verify.py.
-mujoco==3.3.2
