@@ -1,0 +1,40 @@
+{
+  "source": "video/v3_execution.mp4",
+  "source_sha256": "57b85d1f5b84e410d496ce942c0747b82b24cfd9f6d6640543d647c2b02c3c17",
+  "scope": "Excerpts of the existing movie; no new planning or dynamics run.",
+  "ffmpeg_version": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+  "outputs": [
+    {
+      "file": "v3-replay.gif",
+      "start_seconds": 0,
+      "duration_seconds": 15,
+      "fps": 10,
+      "width": 960,
+      "palette_colors": 256,
+      "playback_speed": 1,
+      "scope": "V3 scene 41013, conic arm, repetition 0",
+      "bytes": 1351951,
+      "sha256": "6322a03fd4caf8bbd8f5331ce104b20946d8edc97a8ecc7501d013f323cdf354"
+    },
+    {
+      "file": "quadrotor-illustration.gif",
+      "start_seconds": 49,
+      "duration_seconds": 8,
+      "fps": 8,
+      "width": 640,
+      "palette_colors": 96,
+      "playback_speed": 1,
+      "scope": "Earlier affine-guide flight illustration, outside V3",
+      "bytes": 4136348,
+      "sha256": "891dd55cd03a5c500be271dcecda0b2f2a72a8787d2a3c03ba114f76373bd5ad"
+    },
+    {
+      "file": "v3-replay.mp4",
+      "start_seconds": 0,
+      "duration_seconds": 15,
+      "scope": "V3 scene 41013, conic arm, repetition 0",
+      "bytes": 301033,
+      "sha256": "55d429451f32a66fc87e2f972eb9df4b2111a66d549c4e479825bab4f7f68487"
+    }
+  ]
+}
