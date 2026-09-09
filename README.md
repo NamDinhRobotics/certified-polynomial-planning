@@ -43,15 +43,27 @@ print(list(data))
 
 ## Play or rebuild the video
 
-Open `video/v3_execution.mp4`, or run:
+Open `video/v3_execution.mp4`. The 82-second silent movie contains a 15-second
+V3 telemetry replay, a three-second transition, and the full 64-second earlier
+3D illustration. The appended section is labelled as outside the V3 campaign;
+its scenes and displayed metrics are separate from the V3 results.
+
+To rebuild the V3 replay alone:
 
 ```sh
-python code/video.py
+python code/video.py --output /tmp/v3_replay.mp4
 ```
 
-The 15-second video replays the recorded conic-arm execution of scene 41013,
+The first 15 seconds replay the recorded conic-arm execution of scene 41013,
 repetition 0, with projected SDP, recovered reference and recorded positions.
 The displayed maximum error is 2.47 cm and minimum body clearance is 15.17 cm
 for this run. These are scene-specific sampled metrics, not campaign extrema.
 The moving sphere is the recorded 0.23-m body envelope. No new simulation is
 performed when generating the video.
+
+To rebuild the combined movie, supply the original silent illustration clip
+as an additional input (the standalone source clip is not duplicated here):
+
+```sh
+python code/video.py --append /path/to/polynomial_quadrotor_3d_silent.mp4
+```

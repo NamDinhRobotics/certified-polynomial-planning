@@ -2,6 +2,8 @@ import argparse
 import gzip
 import json
 import os
+import subprocess
+import tempfile
 from pathlib import Path
 os.environ.setdefault('MPLCONFIGDIR', '/tmp/polynomial-planning-mpl')
 import matplotlib
@@ -13,6 +15,36 @@ import numpy as np
 from math import comb
 
 ROOT = Path(__file__).resolve().parents[1]
+
+def append_demo(replay, demo, output):
+    from PIL import Image, ImageDraw, ImageFont
+    from matplotlib.font_manager import findfont
+    with tempfile.TemporaryDirectory() as folder:
+        card = Image.new('RGB', (1920, 1080), '#06121b')
+        draw = ImageDraw.Draw(card)
+        font = findfont('DejaVu Sans')
+        draw.line((160, 365, 1760, 365), fill='#36dac3', width=4)
+        for y, size, color, text in (
+            (410, 62, '#edf6fb', 'From verified paths to 3D flight'),
+            (520, 32, '#36dac3', 'ADDITIONAL ILLUSTRATIVE DEMONSTRATION'),
+            (595, 28, '#a7bdcc', 'Separate earlier scenes and metrics; outside the V3 campaign'),
+        ):
+            draw.text((960, y), text, font=ImageFont.truetype(font, size), fill=color, anchor='mt')
+        card_path = Path(folder)/'transition.png'
+        card.save(card_path)
+        filters = (
+            '[0:v]scale=1920:1080,setsar=1,fps=24,format=yuv420p,setpts=PTS-STARTPTS,fade=t=out:st=14.6:d=0.4[a];'
+            '[1:v]setsar=1,fps=24,format=yuv420p,setpts=PTS-STARTPTS,fade=t=in:d=0.4,fade=t=out:st=2.6:d=0.4[b];'
+            '[2:v]scale=1920:1080,setsar=1,fps=24,format=yuv420p,setpts=PTS-STARTPTS,'
+            'drawbox=x=1260:y=20:w=600:h=52:color=0x06121b:t=fill,'
+            f"drawtext=fontfile='{font}':text='ILLUSTRATIVE DEMO / OUTSIDE V3':x=1280:y=36:fontsize=23:fontcolor=0xa7bdcc,"
+            'fade=t=in:d=0.4[c];[a][b][c]concat=n=3:v=1:a=0[v]'
+        )
+        subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y',
+            '-i', str(replay), '-loop', '1', '-t', '3', '-i', str(card_path),
+            '-i', str(demo), '-filter_complex', filters, '-map', '[v]', '-an',
+            '-c:v', 'libx264', '-crf', '19', '-preset', 'medium', '-pix_fmt', 'yuv420p',
+            '-map_metadata', '-1', '-movflags', '+faststart', str(output)], check=True)
 
 def coefficients(value):
     return np.array([int(a) / int(b) for a, b in value['values']]).reshape(value['shape'])
@@ -28,6 +60,7 @@ def evaluate(G, times):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', default=str(ROOT/'video/v3_execution.mp4'))
+    parser.add_argument('--append', type=Path)
     args = parser.parse_args()
     records = json.loads(gzip.decompress((ROOT/'data/planning.json.gz').read_bytes()))['records']
     r = next(r for r in records if r['run_id'] == 'B_s13_r0_conic')
@@ -108,6 +141,11 @@ def main():
             else:stats.set_text(f'This run: maximum error {max(error)*100:.2f} cm   |   minimum body clearance {min(clearance)*100:.2f} cm   |   no contact')
             writer.grab_frame()
     plt.close(fig)
+    if args.append:
+        with tempfile.TemporaryDirectory() as folder:
+            combined = Path(folder)/'combined.mp4'
+            append_demo(output, args.append, combined)
+            output.write_bytes(combined.read_bytes())
     print(output)
 
 if __name__=='__main__':
