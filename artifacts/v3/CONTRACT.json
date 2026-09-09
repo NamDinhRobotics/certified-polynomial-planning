@@ -1,0 +1,184 @@
+{
+  "A": {
+    "seeds": [
+      31000,
+      31001,
+      31002,
+      31003,
+      31004,
+      31005,
+      31006,
+      31007,
+      31008,
+      31009,
+      31010,
+      31011,
+      31012,
+      31013,
+      31014,
+      31015,
+      31016,
+      31017,
+      31018,
+      31019
+    ],
+    "steps": 8,
+    "repetitions": 2,
+    "unique_inputs": 160,
+    "matched_runs": 320,
+    "stream_dt": 0.1
+  },
+  "B": {
+    "seeds": [
+      41000,
+      41001,
+      41002,
+      41003,
+      41004,
+      41005,
+      41006,
+      41007,
+      41008,
+      41009,
+      41010,
+      41011,
+      41012,
+      41013,
+      41014,
+      41015,
+      41016,
+      41017,
+      41018,
+      41019
+    ],
+    "repetitions": 2,
+    "scenes": 20,
+    "root_arms": [
+      "conic",
+      "factor"
+    ],
+    "attempted_runs": 80,
+    "scene_design": "Same deterministic V2 formulas; class boundaries preassigned 0..4 easy,5..14 cluttered,15..19 on-axis; geometry duplicates retained and disclosed before outcomes.",
+    "class_counts": {
+      "easy": 5,
+      "cluttered": 10,
+      "on_axis_recovery_target": 5
+    }
+  },
+  "root": {
+    "factor_iterations": 12,
+    "local_residual": 1e-07,
+    "local_stationarity": 1e-06,
+    "relative_gap": 1e-05,
+    "conic_tolerances": [
+      1e-09,
+      1e-11
+    ],
+    "conic_max_iterations": 600,
+    "warm_start": true,
+    "arm_state": "independent contexts reset each A seed/repeat and each B scene; B repeat0 cold, repeat1 warm on identical geometry",
+    "SOS_polish": "NumPy _C_POLISH=False",
+    "root_fallback": "unchanged CertifiedSpline guards and conic fallback including cold initialization and seed cost",
+    "representation": "CoordinateSpline private adapter, identical SDP under invertible coordinate transform. Conic absolute objective stopping tolerance is in normalized units; final numeric and exact gates in original units remain unchanged.",
+    "exact_energy_assembly": true
+  },
+  "recovery": {
+    "mode": "normalized Green at middle-segment midpoint",
+    "axis": 1,
+    "signs": [
+      -1,
+      1
+    ],
+    "polish_steps": 12,
+    "plain_early_return": true,
+    "cell_depth": 24,
+    "cell_nodes": 10000,
+    "construction_inflation": "existing dyadic rule from 1/2, max256 halvings",
+    "workspace": "same post-recovery exact Bernstein hull gate for both arms; no alternative workspace recovery tuning"
+  },
+  "physical": {
+    "clearance": "strict original-ball exact rational polynomial positivity; B planning radii physical radius+0.23 body+0.12 reserve+0.04 extra",
+    "endpoint": "A fixed positions; B derivatives orders0..4 rest-to-rest; exact affine and continuity verification",
+    "time_scaling": "existing duration_bounds: start5s, increments0.5s until exact squared derivative hull bounds satisfy speed2m/s acceleration2.5m/s^2 jerk5m/s^3; reject if duration>120s",
+    "derivative_limits": {
+      "v": 2,
+      "a": 2.5,
+      "j": 5
+    },
+    "workspace": "A [-3,3]^2; B x/y [-5,5],z[.35,6], exact Bernstein hull"
+  },
+  "objective": {
+    "relative_gap": 1e-05,
+    "shift_ladder": [
+      0,
+      1e-12,
+      1e-10,
+      1e-08,
+      1e-06
+    ],
+    "meaning": "interval for original normalized-time SDP optimum; not proof recovered trajectory globally optimal"
+  },
+  "timing": {
+    "units": "ms",
+    "clock": "perf_counter wall time",
+    "deadline_seconds": 180,
+    "timeout": "one POSIX service deadline including build; retained failed/censored outcomes; warm context reset after exception",
+    "build": "model/rational-basis/Green setup charged to first service, zero reuse; conic graph compilation remains charged in root",
+    "physical_return": "after physical/recovery/affine/workspace/derivative checks and physical payload serialization",
+    "complete_return": "physical return plus exact SDP interval and full payload serialization",
+    "T_total": "complete call boundary, excludes archive disk IO and offline collision-witness diagnosis",
+    "recovery_checks": "internal exact checks counted in T_recovery; separate final certificate counted in T_physical_cert; disjoint wall timers",
+    "order": "A (repeat+seed+step)%2 and B (scene_index+repeat)%2; paired order balanced",
+    "threads": "BLAS=1",
+    "imports_excluded": true
+  },
+  "mujoco": {
+    "dt": 0.001,
+    "controller_dt": 0.005,
+    "pre_seconds": 1,
+    "post_seconds": 2,
+    "model": "existing generic quadrotor, body envelope sphere; RK4",
+    "mass": 0.6,
+    "inertia": [
+      0.003,
+      0.003,
+      0.005
+    ],
+    "arm": 0.14,
+    "max_rotor": 3.3,
+    "motor_tau": 0.018,
+    "position_gain": 6.25,
+    "velocity_gain": 5,
+    "attitude_gain": 0.35,
+    "body_rate_gain": 0.065,
+    "drag": 0.08,
+    "wind": "existing 0.12N lateral Gaussian sigma.55s centered52% flight",
+    "yaw": ".35*sin(2*pi*s)",
+    "start": "model starts at reference position, identity attitude, zero velocity, hovering rotor thrust",
+    "success": "no contact, positive sampled body/floor clearance, max position error<.12m, final error<.025m",
+    "tracking_gate": "physical reference accepted; objective failure does not block flight and is reported",
+    "metrics": "all pre+flight+post samples; realized acceleration and jerk from finite differences; tracking is numerical evidence only"
+  },
+  "statistics": {
+    "quantiles": [
+      50,
+      90,
+      95,
+      99
+    ],
+    "paired_delta": "factor minus conic",
+    "ties_tolerance_ms": 1e-06,
+    "paired_latency": "joint-success pairs only; report eligibility counts; no success latency assigned to failed service",
+    "CI": "10000 seed-cluster bootstrap draws; preserve all steps and repetitions within each of 20 independent A seed clusters; RNG20260908",
+    "latency_percentiles": "root all returned calls; physical/complete successful calls only; failed service counts and elapsed times separately retained",
+    "diagnostic_strata": [
+      "factor_fallback_false",
+      "factor_fallback_true",
+      "factor_recovery_false",
+      "factor_recovery_true"
+    ],
+    "diagnostic_CI": "Same original 20 seed clusters, including empty groups for the stratum; joint-success latency eligibility; not primary efficacy."
+  },
+  "original_protocol_sha256": "fdd937a50ec8c4a28c62f2b1ec78ba15e46c7a39d0a01c699522bffc62cd1f36",
+  "scope": "Scientific configuration extracted without changing values; source-file inventory and internal workflow records are excluded. Raw numerical records and CSVs are unchanged."
+}

@@ -1,0 +1,643 @@
+{
+ "instance_id": "heldout_41008",
+ "arm": "conic",
+ "input_sha256": "64430beb3ca277f4889bb7dac1a5dd5aebb83957f936411dcf0b568a43574809",
+ "input": {
+  "id": "heldout_41008",
+  "seed": 41008,
+  "group": "cluttered",
+  "family": {
+   "n": 3,
+   "d": 7,
+   "k": 4,
+   "l": 4,
+   "N": 5,
+   "eta": 4
+  },
+  "bc0": [
+   [
+    -3.0,
+    0.2,
+    1.5
+   ],
+   [
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0
+   ]
+  ],
+  "bc1": [
+   [
+    3.0,
+    -0.2,
+    1.6
+   ],
+   [
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0
+   ]
+  ],
+  "obstacles": [
+   [
+    [
+     -1.2000000000000002,
+     0.36507121422007427,
+     1.553643208315611
+    ],
+    0.67
+   ],
+   [
+    [
+     0.0,
+     -0.2217863986260233,
+     1.5004356197100952
+    ],
+    0.6900000000000001
+   ],
+   [
+    [
+     1.2000000000000002,
+     0.10671139321956857,
+     1.5710777409881098
+    ],
+    0.7100000000000001
+   ]
+  ],
+  "physical_obstacles": [
+   {
+    "center": [
+     -1.2000000000000002,
+     0.36507121422007427,
+     1.553643208315611
+    ],
+    "radius": 0.28
+   },
+   {
+    "center": [
+     0.0,
+     -0.2217863986260233,
+     1.5004356197100952
+    ],
+    "radius": 0.30000000000000004
+   },
+   {
+    "center": [
+     1.2000000000000002,
+     0.10671139321956857,
+     1.5710777409881098
+    ],
+    "radius": 0.32
+   }
+  ],
+  "workspace": [
+   [
+    -5.0,
+    -5.0,
+    0.35
+   ],
+   [
+    5.0,
+    5.0,
+    6.0
+   ]
+  ]
+ },
+ "physical_ok": false,
+ "complete_ok": false,
+ "timeout": false,
+ "status": "ROOT_FAILURE",
+ "representation": {
+  "kind": "exact unimodular LLL basis; conic energy unit",
+  "LLL_delta": "3/4",
+  "transform": {
+   "shape": [
+    10,
+    10
+   ],
+   "values": [
+    [
+     "1",
+     "1"
+    ],
+    [
+     "-1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "3",
+     "1"
+    ],
+    [
+     "2",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-1",
+     "1"
+    ],
+    [
+     "3",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "-1",
+     "1"
+    ],
+    [
+     "-1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-2",
+     "1"
+    ],
+    [
+     "3",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-2",
+     "1"
+    ],
+    [
+     "2",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "2",
+     "1"
+    ],
+    [
+     "2",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-3",
+     "1"
+    ],
+    [
+     "-1",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-3",
+     "1"
+    ],
+    [
+     "-2",
+     "1"
+    ],
+    [
+     "2",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "3",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-2",
+     "1"
+    ],
+    [
+     "-2",
+     "1"
+    ],
+    [
+     "2",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "6",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-1",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "3",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-2",
+     "1"
+    ],
+    [
+     "2",
+     "1"
+    ],
+    [
+     "3",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-2",
+     "1"
+    ],
+    [
+     "2",
+     "1"
+    ],
+    [
+     "2",
+     "1"
+    ],
+    [
+     "1",
+     "1"
+    ]
+   ]
+  },
+  "energy_unit": "8388608",
+  "exact_C_zero": true
+ },
+ "numerical": {
+  "ok": false,
+  "status": "optimal_inaccurate",
+  "attempts": 2
+ },
+ "clarabel_calls": [
+  {
+   "status": "optimal",
+   "iterations": 24,
+   "settings": {
+    "solver": "CLARABEL",
+    "tol_gap_abs": 1e-09,
+    "tol_gap_rel": 1e-09,
+    "tol_feas": 1e-09,
+    "max_iter": 600,
+    "warm_start": true
+   }
+  },
+  {
+   "status": "optimal_inaccurate",
+   "iterations": 27,
+   "settings": {
+    "solver": "CLARABEL",
+    "tol_gap_abs": 1e-11,
+    "tol_gap_rel": 1e-11,
+    "tol_feas": 1e-11,
+    "max_iter": 600,
+    "warm_start": true
+   }
+  }
+ ],
+ "clarabel_iterations": 51,
+ "factor_iterations": 0,
+ "factor_fallback": false,
+ "root_status": "optimal_inaccurate",
+ "recovery": {
+  "ok": false,
+  "status": "ROOT_FAILURE"
+ },
+ "timings": {
+  "T_build": 0.05916699592489749,
+  "T_root": 155.73229199799243,
+  "T_projection": 0.0002500019036233425,
+  "T_recovery": 0.00037500285543501377,
+  "T_physical_cert": 4.200410330668092e-05,
+  "T_objective_cert": 8.300412446260452e-05
+ },
+ "T_physical_return": 155.94941699964693,
+ "T_complete_return": 156.0654999993858,
+ "T_total": 156.0684579962981,
+ "packing_and_other_ms": 0.2762489893939346,
+ "scene_index": 8,
+ "repeat": 1,
+ "order": [
+  "factor",
+  "conic"
+ ],
+ "protocol_sha256": "fdd937a50ec8c4a28c62f2b1ec78ba15e46c7a39d0a01c699522bffc62cd1f36",
+ "source_sha256": "39c75ee513e4a6561ba26d5df93519b85af6c42334b4156a9f8301ebc5e3b0b2",
+ "source_manifest": "V3_SOURCE_HASHES.json",
+ "tracking": {
+  "success": false,
+  "not_run_reason": "physical planning not accepted"
+ },
+ "projected_exact_collision_witnesses": [],
+ "projected_collision_status": "NOT_AVAILABLE",
+ "actual_root_source": null,
+ "recovery_attempted": false,
+ "recovery_success": false,
+ "recovery_amplitude": null,
+ "recovery_direction": {
+  "axis": null,
+  "sign": null
+ },
+ "exact_minimum_clearance": null,
+ "workspace_result": null,
+ "derivative_result": null,
+ "exact_objective_interval": {
+  "lower": null,
+  "upper": null,
+  "ok": false
+ },
+ "trajectory_energy_exact": null,
+ "clarabel_iterations_known": 51,
+ "seed": 41008,
+ "step": null,
+ "repetition": 1,
+ "run_id": "B_s8_r1_conic",
+ "campaign_id": "final_experiments_v3_confirmatory_20260909_065940"
+}

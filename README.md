@@ -23,6 +23,25 @@ energy. Workspace-tail construction adds no repaired success on the 240-case
 population. These are disclosed limitations, not omitted cases. Manuscript,
 LaTeX, response letters and editorial/reviewer records remain private.
 
+## Confirmatory V3 data
+
+`artifacts/v3/` adds 720 raw planning records, 40 tracking telemetry files,
+paired and robot CSV tables, and the scientific acceptance contract. Existing
+historical evidence remains unchanged. Run:
+
+```sh
+python verify_v3.py --mutations
+python verify_v3.py --physical --mutations
+```
+
+The first command checks hashes, complete row accounting, paired energy and
+latency summaries, and robot scene groups. The second additionally checks
+rational affine constraints, continuous reference clearance, energy, workspace
+and time-scaled derivative limits using NumPy and SymPy. It does not rerun SDP
+dual certificates, confidence intervals, or simulation dynamics. Both arms and
+all unsuccessful planning calls remain in the data. The physical-energy 1%
+comparison is descriptive and was not a pre-specified endpoint.
+
 ## Verify the delivered results
 
 Use Python 3.12 and run from the repository root:
