@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "campaigns": [
+    {
+      "campaign_id": "v3_20260909",
+      "label": "Historical V3",
+      "campaign_type": "historical_recorded_campaign",
+      "immutable": true,
+      "files": {
+        "planning": "../planning.json.gz",
+        "historical": "../historical.json.gz"
+      },
+      "file_sha256": {
+        "planning.json.gz": "42a1a26e06d178000bdbf9e5a6edc9eed359653aa08067067dc7f7342f061975",
+        "historical.json.gz": "ee74dac7ccb576bad06612429cfd1baf5ad8df91fc8112782bc9c5bcfb9c4afd"
+      }
+    },
+    {
+      "campaign_id": "objective_repair_20260909",
+      "label": "Objective repair validation \u00b7 9 September 2026",
+      "campaign_type": "post_hoc_debug_validation",
+      "directory": "objective_repair_20260909",
+      "metadata": "objective_repair_20260909/campaign.json",
+      "records": "objective_repair_20260909/records.json.gz",
+      "provenance": "objective_repair_20260909/provenance.json"
+    }
+  ]
+}

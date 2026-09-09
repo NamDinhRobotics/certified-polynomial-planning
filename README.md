@@ -5,16 +5,23 @@
 A research artifact for inspecting trajectory recovery, checking continuous-time
 reference constraints, and replaying recorded quadrotor flights.
 
+✅ 80 exact root-SDP objective certificates across 20 scene IDs<br>
 ✅ Exact rational checks of stored polynomial trajectories<br>
-✅ 320 matched conic–factor comparisons with recorded energies and latencies<br>
-✅ A 20-scene MuJoCo campaign, including unsuccessful planning attempts<br>
-✅ Flight replay driven by recorded telemetry
+✅ Recorded tracking telemetry and independent replay<br>
+✅ Preserved V3 results, including unsuccessful planning attempts
+
+The new **`objective_repair_20260909`** campaign records **80/80 physical,
+tracking, and exact root-SDP objective successes**. It documents post-hoc
+debugging on the original V3 population, not a fresh confirmatory experiment.
+
+**Video scope: the media below shows historical V3 and a separate earlier
+illustration. It does not show the new objective-repair campaign.**
 
 [![V3 quadrotor telemetry replay: projected SDP curve, recovered reference, and recorded flight](assets/v3-replay.gif)](assets/v3-replay.mp4)
 
-**[Watch the V3 replay · 15 s](assets/v3-replay.mp4)** ·
+**[Watch the historical V3 replay · 15 s](assets/v3-replay.mp4)** ·
 **[Watch the full demo · 82 s](video/v3_execution.mp4)** ·
-[Quick start](#quick-start) · [Results](#recorded-results) ·
+[Quick start](#quick-start) · [New campaign](#objective-repair-campaign) ·
 [Reproduction guide](docs/REPRODUCIBILITY.md)
 
 *Scene 41013, conic arm, repetition 0. The moving sphere represents the recorded
@@ -33,6 +40,11 @@ continuity constraints, strict obstacle clearance, workspace bounds, and
 time-scaled speed, acceleration, and jerk limits. Tracking errors and body
 clearances are measured separately from simulation telemetry.
 
+The objective checker separately verifies a rational interval enclosing the
+**root SDP relaxation optimum**. Its witness may differ from the candidate used
+to recover the physical reference. This does not establish global optimality of
+the recovered trajectory or continuous-time closed-loop safety.
+
 This repository contains **verification and replay code with recorded data**.
 Optimization runners and the MuJoCo controller/simulation runner are not included
 in this public export. The commands below check the stored experiment and rebuild
@@ -48,24 +60,72 @@ cd certified-polynomial-planning
 
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install numpy sympy matplotlib
+python -m pip install numpy sympy
 
-# Check the V3 population, CSV consistency, statistics, and rejection controls.
+# Replay the new campaign's objective, physical, and tracking checks.
+python code/verify_campaign.py --campaign objective_repair_20260909 --mutations
+
+# Check the preserved historical V3 population and rejection controls.
 python code/verify.py --mutations
 
-# Also replay the exact physical-reference checks and tracking measurements.
+# Also replay historical V3 physical-reference checks and tracking measurements.
 python code/verify.py --physical --mutations
 ```
 
 On Windows, activate the environment with `.venv\Scripts\Activate.ps1` in
 PowerShell. Use `python`, without `-O`, for the exact checks.
-FFmpeg is needed only to rebuild video or README media; MuJoCo is not needed
-to inspect the recorded results.
+Install Matplotlib and FFmpeg only to rebuild video or README media; MuJoCo is
+not needed to inspect the recorded results.
 
-## Recorded results
+## Objective-repair campaign
 
-These values are recomputed from the **V3 data shipped in this repository**.
-They describe a finite recorded campaign, not a universal performance guarantee.
+Campaign **`objective_repair_20260909`** contains the same 20 scene IDs ×
+2 repetitions × 2 arms = **80 attempts**. The stages must be kept distinct:
+
+| Stage | Physical references | Tracking passes | Root-SDP objective certificates |
+| --- | ---: | ---: | ---: |
+| Historical V3 (`v3_20260909`) | 40 / 80 | 40 / 80 | 32 / 80 |
+| Intermediate candidate-recovery debugging | 80 / 80 | 80 / 80 | 32 / 80 |
+| Objective repair (`objective_repair_20260909`) | **80 / 80** | **80 / 80** | **80 / 80** |
+
+Historical V3 objective counts are archived acceptance outcomes; its existing
+checker does not replay dual certificates. The new campaign supplies exact
+objective witnesses and a dedicated verifier. Its rational reference
+coefficients and tracking metrics are unchanged **relative to the intermediate
+candidate-recovery stage**, not relative to original V3.
+
+| Certificate path | Attempts |
+| --- | ---: |
+| Retained original valid certificate | 32 |
+| Repaired dual witness in normalized units | 20 |
+| Independent objective witness from the same SDP, using `energy_unit / 4` | 28 |
+| **Total** | **80** |
+
+All exact relative interval gaps are at most **8.027405685153957 × 10⁻⁶**
+(an outward-rounded bound), below the unchanged **10⁻⁵** acceptance threshold.
+Witness retries use a separate
+context and do not replace the recovered reference. The original numerical
+root gate still rejects **40 attempts**; those labels remain preserved even
+where a subsequent exact witness passes.
+
+The witness fallback adds **56 conic solver calls**, for **206 conic calls**
+across the campaign. Historical V3 latency measurements and speed comparisons
+do not measure this repaired pipeline. This is post-hoc validation on a reused
+population; scene IDs do not imply independent geometry, and the result does
+not establish performance on unseen scenes.
+
+Verified replay totals for the quick-start command are **80 objective
+certificates, 80 physical curves, 1,200 clearance polynomials, 1,800 recovery
+cells, 824,080 tracking samples, and 13 rejected mutations**. See the
+[reproduction guide](docs/REPRODUCIBILITY.md) for scope and data provenance.
+The sample total counts all 80 referenced runs; identical telemetry is stored
+once, giving **25 unique logs with 256,025 samples**.
+
+## Historical V3 results
+
+The following values describe **the preserved V3 data**, identified as
+`v3_20260909` in the campaign index. They are finite recorded results and are
+separate from the objective-repair campaign.
 
 ### Matched conic–factor comparison
 
@@ -113,7 +173,8 @@ closed-loop safety proof or a hardware flight result.
 
 ### V3 telemetry replay
 
-The [15-second replay](assets/v3-replay.mp4) shows the projected SDP curve,
+**This video remains a historical V3 replay.** The
+[15-second replay](assets/v3-replay.mp4) shows the projected SDP curve,
 the recovered reference, recorded positions, tracking error, and body clearance.
 Rebuild it directly from the stored coefficients and telemetry:
 
@@ -149,11 +210,15 @@ for full-movie assembly and media provenance.
 
 | Path | Contents |
 | --- | --- |
+| [`data/campaigns/index.json`](data/campaigns/index.json) | Campaign identities; historical V3 files remain unchanged |
+| [`data/campaigns/objective_repair_20260909/`](data/campaigns/objective_repair_20260909/) | New campaign metadata, compressed records, provenance, and telemetry |
+| [`code/verify_campaign.py`](code/verify_campaign.py) | New campaign's exact objective, physical, tracking, and mutation checks |
+| [`code/objective.py`](code/objective.py) | Rational reconstruction and verification of root-SDP objective intervals |
 | [`code/verify.py`](code/verify.py) | V3 data checks, physical replay, tracking checks, and mutation controls |
 | [`code/exact.py`](code/exact.py) | Rational Bernstein arithmetic and polynomial positivity checks |
 | [`code/video.py`](code/video.py) | Visualization of the recorded V3 flight |
 | [`code/readme_media.py`](code/readme_media.py) | GIF previews and a short MP4 extracted from the existing movie |
-| [`data/`](data/) | Recorded planning data, comparison CSVs, and tracking logs |
+| [`data/`](data/) | Preserved V3 planning data, comparison CSVs, tracking logs, and separate new campaigns |
 | [`video/`](video/) | Full demonstration movie |
 | [`assets/`](assets/) | README media and source/clip hashes |
 | [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Dataset map, checker scope, and reproduction details |
