@@ -1,0 +1,106 @@
+name: Export verified website package
+on:
+  push:
+    branches: ['web/cp-planning-deploy-20260910']
+    paths: ['.github/workflows/export-website-package.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: 6c226f528bc73037fa26b0b78bed9f2607889cf6
+          sparse-checkout: |
+            website
+            tools
+            .github/workflows
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: '10134635970'
+          run-id: 34431085354
+          github-token: ${{ github.token }}
+          path: browser-evidence
+          merge-multiple: true
+      - name: Validate original export and public preview HTTP bytes
+        shell: python
+        run: |
+          from pathlib import Path
+          import concurrent.futures, hashlib, json, urllib.request
+          root = Path('website')
+          manifest = json.loads((root/'SOURCE_PROVENANCE.json').read_text())
+          for name, expected in manifest['export_files'].items():
+              data = (root/name).read_bytes()
+              assert hashlib.sha256(data).hexdigest()==expected['sha256'] and len(data)==expected['bytes'], name
+          test = json.loads((Path('browser-evidence')/'import-website-tests.json').read_text())
+          assert test['passed'] is True and test['total_checks']==44 and not test['javascript_errors'] and not test['http_errors']
+          base = 'https://rawcdn.githack.com/NamDinhRobotics/certified-polynomial-planning/6c226f528bc73037fa26b0b78bed9f2607889cf6/website/'
+          def check(name):
+              row = {'path':name}
+              try:
+                  with urllib.request.urlopen(base+name, timeout=35) as response:
+                      data = response.read(20000000)
+                      row.update(status=response.status, content_type=response.headers.get('Content-Type'), bytes=len(data), sha256=hashlib.sha256(data).hexdigest())
+                  row['same_as_merged_file'] = data == (root/name).read_bytes()
+              except Exception as exc:
+                  row['error'] = str(exc)[:240]
+              print(json.dumps(row), flush=True)
+              return row
+          names = ['index.html','app.js','style.css','vendor/three.module.js','vendor/three.core.js','vendor/OrbitControls.js','assets/evidence.json','assets/evidence-objective.json','assets/hero-flight.mp4','assets/research-film.mp4','assets/v3-replay.mp4','assets/hero-poster.jpg','assets/scene-overview.jpg','assets/v3-poster.jpg']
+          with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+              rows = list(pool.map(check, names))
+          result = {'entry_url':base+'index.html','kind':'third-party commit-pinned public CDN preview, not GitHub Pages','http_verified':all(r.get('status')==200 and r.get('same_as_merged_file') for r in rows),'browser_runtime_tested_on_this_origin':False,'resources':rows,'notice':'rawgit.hack may show its standard first-visit HTML confirmation in a browser; this HTTP check does not bypass or test that interactive notice.'}
+          Path('PREVIEW_HTTP_CHECK.json').write_text(json.dumps(result,indent=2)+'\n')
+      - name: Build portable website_export.zip
+        shell: python
+        run: |
+          from pathlib import Path
+          import hashlib, json, shutil, zipfile
+          dest=Path('export-package/website_export');dest.mkdir(parents=True)
+          shutil.copytree('website',dest/'website')
+          (dest/'tools').mkdir();shutil.copy2('tools/smoke_website.py',dest/'tools/smoke_website.py')
+          (dest/'.github/workflows').mkdir(parents=True)
+          shutil.copy2('.github/workflows/website-pages.yml',dest/'.github/workflows/website-pages.yml')
+          (dest/'validation').mkdir()
+          shutil.copy2('browser-evidence/import-website-tests.json',dest/'validation/WEBSITE_BROWSER_TESTS.json')
+          shutil.copy2('PREVIEW_HTTP_CHECK.json',dest/'validation/PREVIEW_HTTP_CHECK.json')
+          (dest/'README_EXPORT.md').write_text('''# CP / PLANNING — actual static website export
+
+          Source is the merged public repository commit `6c226f528bc73037fa26b0b78bed9f2607889cf6` (PR #2). The website is the actual deployed HTML/CSS/JavaScript, not a reconstruction from browser text or screenshots. Read website/README_EXPORT.md and website/SOURCE_PROVENANCE.json for original source hashes and the two hosting-only changes.
+
+          ## Start locally
+
+          From this folder run `python3 -m http.server 8000 --directory website`, then open http://localhost:8000/ . The website/ folder is both editable source and static build. No Node, npm, React, secrets, backend or compilation is needed.
+
+          ## Browser regression tests
+
+          Use Python 3.12. Install `python -m pip install playwright==1.55.0` and `python -m playwright install --with-deps chromium`. Install Google Chrome (or `python -m playwright install chrome`) if absent. The test uses official Chrome for the H.264 videos. Run `python tools/smoke_website.py`. The included report records 44/44 grouped checks on actual public viewer data, including all 40 scene/campaign combinations, WebGL controls, three videos and mobile layout. It is not a numerical optimization, physics or exact-certificate rerun.
+
+          ## Publishing
+
+          Upload only website/ to a static host, or use the provided GitHub Pages workflow at repository root. GitHub Pages initial activation requires sufficient repository administration permission. A configured/intended URL is not evidence of successful Pages activation; check the workflow outcome. The optional commit-pinned rawgit.hack preview is a third-party CDN, not GitHub Pages. Its HTTP verification result is in validation/PREVIEW_HTTP_CHECK.json, and the service may show a standard confirmation page before opening HTML in a browser.
+
+          ## Public boundary
+
+          No font binaries, credentials, .env, node_modules, manuscript, private evidence or research ZIP is included. App logic, vendor modules, both original JSON datasets and media are preserved. Original-host injected Cloudflare script was removed; fonts use an external Google Fonts CSS request for the same families. No runtime resources are fetched from chatgpt.site. Full-rate scientific evidence remains separately in the public repository.
+          '''.replace('\n          ','\n'))
+          files = [p for p in sorted(dest.rglob('*')) if p.is_file()]
+          for path in files:
+              assert not path.is_symlink()
+              assert path.suffix.lower() not in {'.woff','.woff2','.ttf','.otf','.pdf','.tex','.npz','.env'}
+          (dest/'EXPORT_PACKAGE_MANIFEST.json').write_text(json.dumps({'repository_commit':'6c226f528bc73037fa26b0b78bed9f2607889cf6','files':{str(p.relative_to(dest)):{'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in files}},indent=2)+'\n')
+          with zipfile.ZipFile('website_export.zip','w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as archive:
+              for path in sorted(dest.rglob('*')):
+                  if path.is_file(): archive.write(path,str(path.relative_to(dest.parent)))
+          print('EXPORT_SHA256',hashlib.sha256(Path('website_export.zip').read_bytes()).hexdigest())
+      - uses: actions/upload-artifact@v4
+        with:
+          name: website-portable-export
+          path: |
+            website_export.zip
+            PREVIEW_HTTP_CHECK.json
+          retention-days: 30
