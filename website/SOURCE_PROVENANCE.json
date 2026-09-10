@@ -1,0 +1,221 @@
+{
+  "kind": "actual_deployed_static_source_migration",
+  "source_url": "https://certified-polynomial-planning.dinhnambkhn713956.chatgpt.site/",
+  "source_version_reported": 4,
+  "original_artifact_run_id": 34430646019,
+  "original_artifact_id": 10134346611,
+  "original_sha256": {
+    "index.html": "5679dd1b50cdc38a7513fa88da918bd1bb935d2a2998add12dd5138b96f9a38b",
+    "app.js": "1cc7dd92104cce823ee0ffb4e5995bed280248d9f6811089876c90dc431c23f4",
+    "style.css": "1152c4516a56f92b7546bc5974a70f97f5868fdad76caafd94339e67d127e725",
+    "vendor/three.module.js": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea",
+    "vendor/three.core.js": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6",
+    "vendor/OrbitControls.js": "3d79d07ecb686b4e5d93232eedab255331c1beef711e13164eaa1f68655a5f2b",
+    "assets/evidence.json": "51940661b790d255a98d705fe3aab6efb25a99710e2afbe40329c7a7e78b6c98",
+    "assets/evidence-objective.json": "1e623dfa9e1218b2f62bb416178430908d4656d166357199123220898dd24478",
+    "assets/hero-flight.mp4": "1e4dc7571ccfbeb641fc0a986a42a8e199a988f7d0f358ba854be8872c0b14e6",
+    "assets/hero-poster.jpg": "bc8c3b5f9b49ad7b2c52cceb06baa02ae47777cb2acac5972db5dd993a8e594c",
+    "assets/research-film.mp4": "3e5b8ca732128422dbc35ab8c6948cd26b2347dc31a09ee91deba49f51bfafa4",
+    "assets/scene-overview.jpg": "e0205b57713573becc374cc7d5fafe135e1b7e7494eda15d060ad4a1a918e037",
+    "assets/v3-poster.jpg": "b2cfd985c9d6917af0417dac1ef0674e864129b72d9577f67e27063eadfe94de",
+    "assets/v3-replay.mp4": "55d429451f32a66fc87e2f972eb9df4b2111a66d549c4e479825bab4f7f68487"
+  },
+  "original_http_audit": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "mime": "text/html",
+      "bytes": 21387,
+      "sha256": "5679dd1b50cdc38a7513fa88da918bd1bb935d2a2998add12dd5138b96f9a38b",
+      "has_expected_title": true,
+      "contains_saved_from_url": false,
+      "contains_canvas": false
+    },
+    {
+      "path": "app.js",
+      "status": 200,
+      "mime": "text/javascript",
+      "bytes": 24541,
+      "sha256": "1cc7dd92104cce823ee0ffb4e5995bed280248d9f6811089876c90dc431c23f4"
+    },
+    {
+      "path": "style.css",
+      "status": 200,
+      "mime": "text/css",
+      "bytes": 30043,
+      "sha256": "1152c4516a56f92b7546bc5974a70f97f5868fdad76caafd94339e67d127e725"
+    },
+    {
+      "path": "vendor/three.module.js",
+      "status": 200,
+      "mime": "text/javascript",
+      "bytes": 662772,
+      "sha256": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea"
+    },
+    {
+      "path": "vendor/three.core.js",
+      "status": 200,
+      "mime": "text/javascript",
+      "bytes": 1458113,
+      "sha256": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6"
+    },
+    {
+      "path": "vendor/OrbitControls.js",
+      "status": 200,
+      "mime": "text/javascript",
+      "bytes": 40755,
+      "sha256": "3d79d07ecb686b4e5d93232eedab255331c1beef711e13164eaa1f68655a5f2b"
+    },
+    {
+      "path": "assets/evidence.json",
+      "status": 200,
+      "mime": "application/json",
+      "bytes": 844712,
+      "sha256": "51940661b790d255a98d705fe3aab6efb25a99710e2afbe40329c7a7e78b6c98",
+      "keys": [
+        "source",
+        "sourceCommit",
+        "datasetSha256",
+        "sampleColumns",
+        "scope",
+        "summary",
+        "scenes"
+      ]
+    },
+    {
+      "path": "assets/evidence-objective.json",
+      "status": 200,
+      "mime": "application/json",
+      "bytes": 1686412,
+      "sha256": "1e623dfa9e1218b2f62bb416178430908d4656d166357199123220898dd24478",
+      "keys": [
+        "campaignId",
+        "source",
+        "sourceCommit",
+        "datasetSha256",
+        "sourceManifestSha256",
+        "sampleColumns",
+        "scope",
+        "summary",
+        "scenes"
+      ]
+    },
+    {
+      "path": "assets/hero-flight.mp4",
+      "status": 200,
+      "mime": "video/mp4",
+      "bytes": 1991567,
+      "sha256": "1e4dc7571ccfbeb641fc0a986a42a8e199a988f7d0f358ba854be8872c0b14e6"
+    },
+    {
+      "path": "assets/hero-poster.jpg",
+      "status": 200,
+      "mime": "image/jpeg",
+      "bytes": 51842,
+      "sha256": "bc8c3b5f9b49ad7b2c52cceb06baa02ae47777cb2acac5972db5dd993a8e594c"
+    },
+    {
+      "path": "assets/research-film.mp4",
+      "status": 200,
+      "mime": "video/mp4",
+      "bytes": 5665303,
+      "sha256": "3e5b8ca732128422dbc35ab8c6948cd26b2347dc31a09ee91deba49f51bfafa4"
+    },
+    {
+      "path": "assets/scene-overview.jpg",
+      "status": 200,
+      "mime": "image/jpeg",
+      "bytes": 327443,
+      "sha256": "e0205b57713573becc374cc7d5fafe135e1b7e7494eda15d060ad4a1a918e037"
+    },
+    {
+      "path": "assets/v3-poster.jpg",
+      "status": 200,
+      "mime": "image/jpeg",
+      "bytes": 80131,
+      "sha256": "b2cfd985c9d6917af0417dac1ef0674e864129b72d9577f67e27063eadfe94de"
+    },
+    {
+      "path": "assets/v3-replay.mp4",
+      "status": 200,
+      "mime": "video/mp4",
+      "bytes": 301033,
+      "sha256": "55d429451f32a66fc87e2f972eb9df4b2111a66d549c4e479825bab4f7f68487"
+    }
+  ],
+  "changes": [
+    "Removed only hosting-injected Cloudflare challenge from HTTP HTML.",
+    "Moved identical font family requests to Google Fonts CSS; no font binaries bundled.",
+    "Added .nojekyll, readme, vendor license and provenance."
+  ],
+  "export_files": {
+    ".nojekyll": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "README_EXPORT.md": {
+      "bytes": 3305,
+      "sha256": "4baaf4bca74bb0706780d1ee6f8f63dcb6d21caa2af3567f967e816a8a222924"
+    },
+    "app.js": {
+      "bytes": 24541,
+      "sha256": "1cc7dd92104cce823ee0ffb4e5995bed280248d9f6811089876c90dc431c23f4"
+    },
+    "assets/evidence-objective.json": {
+      "bytes": 1686412,
+      "sha256": "1e623dfa9e1218b2f62bb416178430908d4656d166357199123220898dd24478"
+    },
+    "assets/evidence.json": {
+      "bytes": 844712,
+      "sha256": "51940661b790d255a98d705fe3aab6efb25a99710e2afbe40329c7a7e78b6c98"
+    },
+    "assets/hero-flight.mp4": {
+      "bytes": 1991567,
+      "sha256": "1e4dc7571ccfbeb641fc0a986a42a8e199a988f7d0f358ba854be8872c0b14e6"
+    },
+    "assets/hero-poster.jpg": {
+      "bytes": 51842,
+      "sha256": "bc8c3b5f9b49ad7b2c52cceb06baa02ae47777cb2acac5972db5dd993a8e594c"
+    },
+    "assets/research-film.mp4": {
+      "bytes": 5665303,
+      "sha256": "3e5b8ca732128422dbc35ab8c6948cd26b2347dc31a09ee91deba49f51bfafa4"
+    },
+    "assets/scene-overview.jpg": {
+      "bytes": 327443,
+      "sha256": "e0205b57713573becc374cc7d5fafe135e1b7e7494eda15d060ad4a1a918e037"
+    },
+    "assets/v3-poster.jpg": {
+      "bytes": 80131,
+      "sha256": "b2cfd985c9d6917af0417dac1ef0674e864129b72d9577f67e27063eadfe94de"
+    },
+    "assets/v3-replay.mp4": {
+      "bytes": 301033,
+      "sha256": "55d429451f32a66fc87e2f972eb9df4b2111a66d549c4e479825bab4f7f68487"
+    },
+    "index.html": {
+      "bytes": 20449,
+      "sha256": "f816c2345e29d4936473b0df12581def6df1cc88e5279454e32a72b64935a69b"
+    },
+    "style.css": {
+      "bytes": 29818,
+      "sha256": "36c287201d549bf4f4f2a30415de85ebef7f23ae397ab3c255dfa837884a5428"
+    },
+    "vendor/LICENSE.three.txt": {
+      "bytes": 1078,
+      "sha256": "5797cefc35ee77088f6290f28dc6179b1923c83f968e588b87a5d5d563097159"
+    },
+    "vendor/OrbitControls.js": {
+      "bytes": 40755,
+      "sha256": "3d79d07ecb686b4e5d93232eedab255331c1beef711e13164eaa1f68655a5f2b"
+    },
+    "vendor/three.core.js": {
+      "bytes": 1458113,
+      "sha256": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6"
+    },
+    "vendor/three.module.js": {
+      "bytes": 662772,
+      "sha256": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea"
+    }
+  }
+}
