@@ -1,0 +1,108 @@
+name: Verify published CP Planning website
+on:
+  workflow_run:
+    workflows: ['pages build and deployment', 'CP Planning website']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cp-planning-live-audit
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install browser test dependency
+        run: python -m pip install playwright==1.55.0
+      - name: Check published root route and application bytes
+        shell: python
+        run: |
+          import hashlib, json, urllib.request
+          from pathlib import Path
+          from urllib.parse import urlsplit
+          from playwright.sync_api import sync_playwright
+          base = 'https://namdinhrobotics.github.io/certified-polynomial-planning/'
+          out = Path('live-audit'); out.mkdir(exist_ok=True)
+          site = Path('website')
+          manifest = json.loads((site/'SOURCE_PROVENANCE.json').read_text())
+          report = {'requested_url':base, 'passed':False, 'checks':[], 'http_files':[], 'javascript_errors':[]}
+          def digest(data):
+              return hashlib.sha256(data).hexdigest()
+          def fetch(url):
+              request = urllib.request.Request(url, headers={'Cache-Control':'no-cache', 'User-Agent':'CP-Planning-Owner-Audit/1.0'})
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  assert response.status == 200, url
+                  return response.read()
+          try:
+              entry = fetch(base)
+              if digest(entry) == digest((site/'index.html').read_bytes()):
+                  report['publishing_mode'] = 'workflow: original application at root'
+                  application = base
+              else:
+                  assert digest(entry) == digest(Path('index.html').read_bytes()), 'Root serves neither original application nor reviewed redirect; README/Jekyll regression'
+                  report['publishing_mode'] = 'branch root: reviewed redirect to original application'
+                  application = base + 'website/'
+              report['application_url'] = application
+              report['checks'].append('Root is original application or reviewed redirect, never generated README')
+              for name, meta in manifest['export_files'].items():
+                  if not name.endswith(('.html','.js','.css','.json','.jpg','.mp4')):
+                      continue
+                  data = fetch(application + name)
+                  assert len(data) == meta['bytes'] and digest(data) == meta['sha256'], 'Published asset mismatch: '+name
+                  report['http_files'].append({'path':name,'bytes':len(data),'sha256':digest(data)})
+              report['checks'].append('All 14 original runtime files match reviewed source hashes')
+              with sync_playwright() as p:
+                  browser = p.chromium.launch(channel='chrome', headless=True, args=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist'])
+                  report['browser'] = browser.version
+                  page = browser.new_page(viewport={'width':1366,'height':900}, reduced_motion='reduce')
+                  page.on('pageerror', lambda error: report['javascript_errors'].append(str(error)))
+                  page.goto(base+'?route-check=1#demo', wait_until='domcontentloaded', timeout=45000)
+                  page.wait_for_selector('#scene-canvas canvas', timeout=45000)
+                  page.wait_for_function("document.querySelectorAll('#scene-select option').length===20 && document.querySelector('#viewer-status').hidden", timeout=45000)
+                  final = urlsplit(page.url)
+                  assert final.path == urlsplit(application).path and final.query == 'route-check=1' and final.fragment == 'demo', 'Root redirect lost path, query or fragment'
+                  report['final_url'] = page.url
+                  assert page.locator('#scene-canvas canvas').count() == 1
+                  assert page.locator('#viewer-fallback').is_hidden()
+                  report['checks'].append('Browser root entry reaches original WebGL viewer and preserves query/fragment')
+                  # Verify the no-JavaScript fallback for branch-root publication.
+                  if application != base:
+                      nojs = browser.new_context(java_script_enabled=False)
+                      fallback = nojs.new_page()
+                      fallback.goto(base, wait_until='domcontentloaded', timeout=45000)
+                      fallback.wait_for_url(application, timeout=30000)
+                      report['checks'].append('No-JavaScript root fallback reaches the application')
+                      nojs.close()
+                  page.evaluate('window.scrollTo(0,0)')
+                  page.locator('video').evaluate_all('(videos)=>videos.forEach(v=>v.pause())')
+                  page.wait_for_timeout(500)
+                  page.screenshot(path=str(out/'restored-home.png'))
+                  page.locator('#scene-canvas').scroll_into_view_if_needed()
+                  page.screenshot(path=str(out/'restored-viewer.png'))
+                  assert not report['javascript_errors'], report['javascript_errors']
+                  report['passed'] = True
+                  browser.close()
+          finally:
+              (out/'routing-and-hashes.json').write_text(json.dumps(report,indent=2)+'\n')
+              print(json.dumps(report,indent=2), flush=True)
+      - name: Test all live scenes, campaigns, controls and videos through root URL
+        run: python tools/smoke_website.py --online https://namdinhrobotics.github.io/certified-polynomial-planning/ --out live-audit/browser-tests.json
+      - name: Upload live validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cp-planning-live-audit
+          path: live-audit/
+          retention-days: 30
+          if-no-files-found: warn
