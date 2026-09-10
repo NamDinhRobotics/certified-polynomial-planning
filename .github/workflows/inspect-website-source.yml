@@ -1,0 +1,61 @@
+name: Inspect CP Planning public source
+on:
+  push:
+    branches: ['web/cp-planning-deploy-20260910']
+    paths: ['.github/workflows/inspect-website-source.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Retrieve original HTTP resources (no DOM reconstruction)
+        shell: python
+        run: |
+          from pathlib import Path
+          import hashlib, json, urllib.request, urllib.error
+          base = 'https://certified-polynomial-planning.dinhnambkhn713956.chatgpt.site/'
+          out = Path('public-source'); out.mkdir()
+          paths = ['', 'app.js', 'style.css', 'vendor/three.module.js', 'vendor/three.core.js', 'vendor/OrbitControls.js', 'assets/evidence.json', 'assets/evidence-objective.json', 'assets/hero-flight.mp4', 'assets/hero-poster.jpg', 'assets/research-film.mp4', 'assets/scene-overview.jpg', 'assets/v3-poster.jpg', 'assets/v3-replay.mp4']
+          results = []
+          for path in paths:
+              entry = {'path': path or 'index.html'}
+              try:
+                  req = urllib.request.Request(base + path, headers={'User-Agent': 'CP-Planning-Owner-Export/1.0'})
+                  with urllib.request.urlopen(req, timeout=20) as response:
+                      data = response.read(50 * 1024 * 1024 + 1)
+                      if len(data) > 50 * 1024 * 1024: raise ValueError('Response exceeds size limit')
+                      entry.update(status=response.status, mime=response.headers.get('Content-Type'), bytes=len(data), sha256=hashlib.sha256(data).hexdigest())
+                  if path == '':
+                      text = data.decode('utf-8')
+                      entry['has_expected_title'] = 'Certified Polynomial Trajectory Planning' in text
+                      entry['contains_saved_from_url'] = 'saved from url=' in text
+                      entry['contains_canvas'] = '<canvas' in text.lower()
+                      if not entry['has_expected_title']: raise ValueError('Not the expected website; will not save challenge or login response')
+                  elif path.endswith('.json'):
+                      obj = json.loads(data)
+                      entry['keys'] = list(obj)[:20] if isinstance(obj, dict) else ['array']
+                  elif path.endswith(('.js', '.css')) and b'<html' in data[:500].lower():
+                      raise ValueError('HTML response instead of source')
+                  target = out / (path or 'index.html')
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(data)
+              except Exception as exc:
+                  entry['error'] = str(exc)[:240]
+              results.append(entry)
+              print(json.dumps(entry), flush=True)
+          (out / 'HTTP_AUDIT.json').write_text(json.dumps(results, indent=2))
+      - name: Check current Pages configuration
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/${{ github.repository }}/pages --jq '{status,html_url,build_type,source}' || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cp-planning-original-public-source
+          path: public-source/
+          retention-days: 3
+          if-no-files-found: error
