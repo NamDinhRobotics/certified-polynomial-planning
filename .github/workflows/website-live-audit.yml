@@ -1,5 +1,8 @@
 name: Verify published CP Planning website
 on:
+  push:
+    branches: [main]
+    paths: ['README.md', 'index.html', '.github/workflows/website-live-audit.yml']
   workflow_run:
     workflows: ['pages build and deployment', 'CP Planning website']
     types: [completed]
@@ -12,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   verify:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
