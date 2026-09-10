@@ -1,4 +1,6 @@
-# [🌐 CP / PLANNING — Live Website & Interactive 3D Demo](https://namdinhrobotics.github.io/certified-polynomial-planning/)
+# Certified Polynomial Trajectory Planning
+
+**[🌐 Live Website & Interactive 3D Demo →](https://namdinhrobotics.github.io/certified-polynomial-planning/)**
 
 **From semidefinite relaxations to verified polynomial trajectories.**
 
