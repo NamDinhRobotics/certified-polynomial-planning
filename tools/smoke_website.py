@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
-"""UI smoke tests on original public display data, not scientific recertification."""
+"""UI smoke tests on original public display data, not scientific recertification.
+
+Install Playwright and Google Chrome (or `playwright install chrome`). Official
+Chrome includes the H.264 codecs used by the original, unmodified MP4 assets.
+"""
 import argparse, functools, http.server, json, threading
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *_): pass
+    def copyfile(self, source, outputfile):
+        try:
+            super().copyfile(source, outputfile)
+        except (BrokenPipeError, ConnectionResetError):
+            pass  # Browsers legitimately cancel video downloads on reload/seek.
 
 def require(value, message):
     if not value: raise AssertionError(message)
@@ -23,10 +32,11 @@ def main():
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     base = args.online.rstrip('/')+'/' if args.online else f'http://127.0.0.1:{server.server_port}/'
-    report = {'scope': 'Browser UI smoke test, not optimization, dynamics or exact arithmetic replay', 'checks': [], 'javascript_errors': [], 'http_errors': []}
+    report = {'scope': 'Browser UI smoke test, not optimization, dynamics or exact arithmetic replay', 'checks': [], 'javascript_errors': [], 'http_errors': [], 'passed': False}
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True, args=['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'])
+            browser = p.chromium.launch(channel='chrome', headless=True, args=['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'])
+            report['browser'] = {'channel':'chrome', 'version':browser.version}
             page = browser.new_page(viewport={'width':1366, 'height':900}, reduced_motion='reduce')
             page.set_default_timeout(20000)
             page.on('pageerror', lambda error: report['javascript_errors'].append(str(error)))
@@ -75,9 +85,16 @@ def main():
             require(page.locator('#play-time').inner_text()=='0.00 s', 'Restart')
             report['checks'].append('Four stages, three camera presets, four layer toggles, speed, playback, seek and restart')
             require(page.locator('#energy-chart rect').count()>0, 'Historical histogram')
-            page.locator('video').evaluate_all('(videos)=>videos.forEach(v=>{v.preload="auto";v.load();})')
-            page.wait_for_function('[...document.querySelectorAll("video")].every(v=>v.readyState>=1 && v.videoWidth>0)')
-            report['checks'].append('Historical histogram; all original video metadata decode')
+            page.locator('video').evaluate_all('(videos)=>videos.forEach(v=>{v.muted=true;v.preload="auto";v.load();})')
+            try:
+                page.wait_for_function('[...document.querySelectorAll("video")].every(v=>v.readyState>=1 && v.videoWidth>0)', timeout=45000)
+                page.locator('video').evaluate_all('(videos)=>Promise.all(videos.map(v=>v.play()))')
+                page.wait_for_function('[...document.querySelectorAll("video")].every(v=>v.currentTime>0.1 && v.readyState>=2)', timeout=30000)
+                page.locator('video').evaluate_all('(videos)=>videos.forEach(v=>v.pause())')
+            finally:
+                report['video_diagnostics'] = page.locator('video').evaluate_all('(videos)=>videos.map(v=>({src:v.currentSrc,readyState:v.readyState,networkState:v.networkState,width:v.videoWidth,height:v.videoHeight,time:v.currentTime,error:v.error?{code:v.error.code,message:v.error.message}:null,h264:v.canPlayType(\'video/mp4; codecs="avc1.640028"\')}))')
+                print('VIDEO_DIAGNOSTICS', json.dumps(report['video_diagnostics']), flush=True)
+            report['checks'].append('Historical histogram; all three original H264 videos decode and play')
             page.set_viewport_size({'width':390, 'height':844})
             page.wait_for_timeout(300)
             require(page.evaluate('document.documentElement.scrollWidth<=window.innerWidth+2'), 'Mobile horizontal overflow')
