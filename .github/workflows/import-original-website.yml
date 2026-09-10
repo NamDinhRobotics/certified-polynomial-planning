@@ -1,0 +1,167 @@
+name: Import original CP Planning website
+on:
+  push:
+    branches: ['web/cp-planning-deploy-20260910']
+    paths: ['.github/workflows/import-original-website.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: web/cp-planning-deploy-20260910
+      - uses: actions/download-artifact@v4
+        with:
+          name: cp-planning-original-public-source
+          run-id: 34430646019
+          github-token: ${{ github.token }}
+          path: original-public-source
+      - name: Import only approved frozen HTTP resources
+        shell: python
+        run: |
+          from pathlib import Path
+          import hashlib, json, re, shutil
+          source = Path('original-public-source')
+          root = Path('website'); root.mkdir(exist_ok=True)
+          expected = {
+            'index.html': '5679dd1b50cdc38a7513fa88da918bd1bb935d2a2998add12dd5138b96f9a38b',
+            'app.js': '1cc7dd92104cce823ee0ffb4e5995bed280248d9f6811089876c90dc431c23f4',
+            'style.css': '1152c4516a56f92b7546bc5974a70f97f5868fdad76caafd94339e67d127e725',
+            'vendor/three.module.js': '9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea',
+            'vendor/three.core.js': '9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6',
+            'vendor/OrbitControls.js': '3d79d07ecb686b4e5d93232eedab255331c1beef711e13164eaa1f68655a5f2b',
+            'assets/evidence.json': '51940661b790d255a98d705fe3aab6efb25a99710e2afbe40329c7a7e78b6c98',
+            'assets/evidence-objective.json': '1e623dfa9e1218b2f62bb416178430908d4656d166357199123220898dd24478',
+            'assets/hero-flight.mp4': '1e4dc7571ccfbeb641fc0a986a42a8e199a988f7d0f358ba854be8872c0b14e6',
+            'assets/hero-poster.jpg': 'bc8c3b5f9b49ad7b2c52cceb06baa02ae47777cb2acac5972db5dd993a8e594c',
+            'assets/research-film.mp4': '3e5b8ca732128422dbc35ab8c6948cd26b2347dc31a09ee91deba49f51bfafa4',
+            'assets/scene-overview.jpg': 'e0205b57713573becc374cc7d5fafe135e1b7e7494eda15d060ad4a1a918e037',
+            'assets/v3-poster.jpg': 'b2cfd985c9d6917af0417dac1ef0674e864129b72d9577f67e27063eadfe94de',
+            'assets/v3-replay.mp4': '55d429451f32a66fc87e2f972eb9df4b2111a66d549c4e479825bab4f7f68487'
+          }
+          assert {str(p.relative_to(source)) for p in source.rglob('*') if p.is_file()} == set(expected) | {'HTTP_AUDIT.json'}
+          for name, digest in expected.items():
+              path = source/name
+              assert not path.is_symlink() and path.resolve().is_relative_to(source.resolve())
+              data = path.read_bytes()
+              assert hashlib.sha256(data).hexdigest() == digest, name
+              target = root/name
+              target.parent.mkdir(parents=True, exist_ok=True)
+              assert not target.is_symlink()
+              target.write_bytes(data)
+          html = (root/'index.html').read_text()
+          assert 'saved from url=' not in html and '<canvas' not in html
+          html, count = re.subn(r'<script>\(function\(\)\{function c\(\).*?</script>', '', html, flags=re.S)
+          assert count == 1 and '/cdn-cgi/' not in html
+          (root/'index.html').write_text(html)
+          css = (root/'style.css').read_text()
+          css, count = re.subn(r'@font-face\s*\{[^}]*\}', '', css, flags=re.S)
+          assert count == 2
+          css = "@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..1000&family=Manrope:wght@200..800&display=swap');\n" + css.lstrip()
+          (root/'style.css').write_text(css)
+          (root/'.nojekyll').write_text('')
+          (root/'README_EXPORT.md').write_text('''# CP / PLANNING — portable static website
+
+          This folder contains actual HTML, JavaScript, CSS, Three.js modules, media and viewer JSON fetched directly from the public Site on 10 September 2026. It is not a DOM/text reconstruction or a new UI implementation. Original acquisition run: 34430646019; artifact: 10134346611. All imported bytes were checked against a fixed SHA-256 allowlist.
+
+          ## Run locally
+
+          From the repository root: `python3 -m http.server 8000 --directory website`, then open `http://localhost:8000/`. Do not open index.html with file://: ES modules and fetch require HTTP. No npm dependencies, build tool or server backend is required; this directory is already a static production build.
+
+          ## Preserved
+
+          The actual app.js, all three vendor modules, both original evidence JSON files, and every imported image/video are unchanged. The two campaigns each include scene IDs 41000–41019. Historical failures are retained. The viewer displays conic-arm repetition 0, not every one of the 80 experiment attempts. Original videos keep their original experiment scope.
+
+          ## Hosting-only changes
+
+          Removed the Cloudflare challenge script injected by the original hosting layer from the HTTP HTML. Replaced the two local font rules with Google Fonts CSS requesting the same Manrope and DM Sans families. Font binaries are not bundled. All other application logic and layout CSS are preserved. The site has no runtime dependency on chatgpt.site. External Google Fonts is optional; system sans-serif is the fallback when unavailable.
+
+          ## Data and limitations
+
+          The frozen historical display dataset records source commit 0c9970f7250594027a79a04e43b5f772c3c44419. The objective-repair display dataset records c6dd795831bb77cc6e806441829fea0666312aa0. Data files were copied from the deployed Site, not regenerated by the earlier data bridge. Browser validation is not a rerun of optimization, simulation dynamics or exact certificates. Full evidence remains under the repository data/ directory. Do not confuse 80/80 archived certificates with global optimality of recovered physical trajectories or continuous closed-loop safety.
+
+          ## Deployment
+
+          The repository workflow .github/workflows/website-pages.yml validates file hashes, tests the viewer and publishes only website/. Initial GitHub Pages activation may require an administrator to select Settings → Pages → Source → GitHub Actions. Intended URL after successful deployment: https://namdinhrobotics.github.io/certified-polynomial-planning/ . A configured URL alone does not confirm a successful deployment.
+
+          ## Tests and updates
+
+          Install playwright==1.55.0 and run `python -m playwright install --with-deps chromium`, then `python tools/smoke_website.py`. When editing intentional source files, review the changes and update the corresponding entries in SOURCE_PROVENANCE.json; CI deliberately rejects unexplained hash changes. Original HTTP hashes remain recorded separately.
+
+          ## Public export boundary
+
+          No credentials, .env, node_modules, research archives, manuscripts, full-rate private evidence, browser extensions or font files are included. Three.js retains its upstream MIT copyright/SPDX headers; the accompanying vendor license applies only to that third-party code. No new license is assigned to research data or author code.
+          '''.replace('\n          ', '\n'))
+          (root/'vendor/LICENSE.three.txt').write_text('''The MIT License
+
+          Copyright 2010-2026 Three.js Authors
+
+          Permission is hereby granted, free of charge, to any person obtaining a copy
+          of this software and associated documentation files (the "Software"), to deal
+          in the Software without restriction, including without limitation the rights
+          to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+          copies of the Software, and to permit persons to whom the Software is
+          furnished to do so, subject to the following conditions:
+
+          The above copyright notice and this permission notice shall be included in
+          all copies or substantial portions of the Software.
+
+          THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+          IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+          FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+          AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+          LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+          OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+          THE SOFTWARE.
+          '''.replace('\n          ', '\n'))
+          for path in root.rglob('*'):
+              if not path.is_file(): continue
+              assert path.suffix.lower() not in {'.woff', '.woff2', '.ttf', '.otf', '.zip', '.npz', '.pdf', '.tex', '.env'}
+              assert not path.name.startswith(('.env', 'PRIVATE_', 'DEBUG_')) and 'node_modules' not in path.parts
+              if path.suffix in {'.html', '.css', '.js', '.json', '.md', '.txt'}:
+                  text = path.read_text()
+                  assert not re.search(r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{50,}|AKIA[0-9A-Z]{16}', text), path
+          for name in ['evidence.json','evidence-objective.json']:
+              data = json.loads((root/'assets'/name).read_text())
+              assert len(data['scenes']) == 20 and {s['id'] for s in data['scenes']} == set(range(41000,41020))
+          provenance = {'kind':'actual_deployed_static_source_migration', 'source_url':'https://certified-polynomial-planning.dinhnambkhn713956.chatgpt.site/', 'source_version_reported':4, 'original_artifact_run_id':34430646019, 'original_artifact_id':10134346611, 'original_sha256':expected, 'original_http_audit':json.loads((source/'HTTP_AUDIT.json').read_text()), 'changes':['Removed only hosting-injected Cloudflare challenge from HTTP HTML.', 'Moved identical font family requests to Google Fonts CSS; no font binaries bundled.', 'Added .nojekyll, readme, vendor license and provenance.'], 'export_files':{str(p.relative_to(root)):{'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(root.rglob('*')) if p.is_file() and p.name!='SOURCE_PROVENANCE.json'}}
+          (root/'SOURCE_PROVENANCE.json').write_text(json.dumps(provenance,indent=2)+'\n')
+          print('Imported and hash-checked', len(expected), 'original files. No application logic was reconstructed.')
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install browser verification dependencies
+        run: |
+          python -m pip install playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Verify real 3D viewer before committing source
+        run: python tools/smoke_website.py --out import-website-tests.json
+      - name: Commit approved website and public viewer data
+        env:
+          TARGET_BRANCH: web/cp-planning-deploy-20260910
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- website/
+          if ! git diff --cached --quiet; then
+            git commit -m 'web: preserve original CP Planning source, both campaigns and public assets'
+            git push origin "HEAD:$TARGET_BRANCH"
+          fi
+          echo "WEBSITE_COMMIT=$(git rev-parse HEAD)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cp-planning-import-tests
+          path: import-website-tests.json
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: website-export-public
+          path: website/
+          include-hidden-files: true
+          retention-days: 30

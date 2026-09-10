@@ -1,0 +1,85 @@
+name: CP Planning website
+on:
+  push:
+    branches: [main]
+    paths: ['website/**', 'tools/smoke_website.py', '.github/workflows/website-pages.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cp-planning-pages
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Check frozen public source manifest
+        shell: python
+        run: |
+          from pathlib import Path
+          import hashlib, json
+          root = Path('website')
+          provenance = json.loads((root/'SOURCE_PROVENANCE.json').read_text())
+          expected = provenance['export_files']
+          actual = {str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()}
+          assert actual == set(expected) | {'SOURCE_PROVENANCE.json'}, 'Unexpected or missing published files'
+          for name, meta in expected.items():
+              path = root / name
+              assert not path.is_symlink() and path.resolve().is_relative_to(root.resolve())
+              data = path.read_bytes()
+              assert len(data) == meta['bytes'] and hashlib.sha256(data).hexdigest() == meta['sha256'], name
+          print('Validated', len(actual), 'allowlisted website files')
+      - name: Install browser test dependencies
+        run: |
+          python -m pip install playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Test both campaigns and original 3D viewer
+        run: python tools/smoke_website.py --out website-tests.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: website-test-results
+          path: website-tests.json
+          retention-days: 30
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: website
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages (first-time enablement requires repository permission)
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Deploy verified public website
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Check published HTTP resources
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        shell: python
+        run: |
+          import json, os, urllib.request
+          base = os.environ['PAGE_URL'].rstrip('/')+'/'
+          with urllib.request.urlopen(base, timeout=30) as response:
+              assert response.status == 200
+              assert 'CP<span> / </span>PLANNING' in response.read().decode()
+          for name in ['evidence.json', 'evidence-objective.json']:
+              with urllib.request.urlopen(base+'assets/'+name, timeout=30) as response:
+                  data = json.load(response)
+              assert {s['id'] for s in data['scenes']} == set(range(41000, 41020))
+          print('LIVE:', base)
